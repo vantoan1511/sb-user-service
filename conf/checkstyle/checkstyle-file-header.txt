@@ -1,0 +1,6 @@
+/*
+ * *$
+ *
+ * Copyright by sb-user-service, all rights reserved.
+ * MIT License: https://mit-license.org
+ */
