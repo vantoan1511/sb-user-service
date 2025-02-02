@@ -23,6 +23,8 @@ dependencies {
     // utilities
     //implementation "net.sf.jptools:jptools:${commonGradleJptoolsVersion}"
     //implementation "net.sf.jptools:jptools:${commonGradleJptoolsVersion}:slf4j-redirect"
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     // resteasy
     implementation 'io.quarkus:quarkus-resteasy-jackson'
@@ -34,15 +36,11 @@ dependencies {
     // readiness and liveness probe support
     implementation 'io.quarkus:quarkus-smallrye-health'
 
-    // orm
-    //implementation 'io.quarkus:quarkus-hibernate-orm'
-
-    // database driver
-    //implementation 'io.quarkus:quarkus-jdbc-postgresql'
-    //implementation 'io.quarkus:quarkus-jdbc-oracle'
-
-    // liquibase support
-    //implementation 'io.quarkus:quarkus-liquibase'
+    // database
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+    implementation 'io.quarkus:quarkus-hibernate-orm'
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache'
+    implementation 'io.quarkus:quarkus-liquibase'
 
     implementation 'com.shopbee.sb:sb-user-service-api-spec:1.0.0'
 
