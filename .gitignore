@@ -67,3 +67,4 @@ nb-configuration.xml
 # vi swap files
 *.swp
 *.swo
+/src/main/resources/META-INF/resources/index.html
