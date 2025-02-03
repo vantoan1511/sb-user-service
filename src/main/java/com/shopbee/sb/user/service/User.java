@@ -9,6 +9,8 @@ package com.shopbee.sb.user.service;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +38,8 @@ public class User {
     private String lastName;
 
     @Column
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -64,7 +67,7 @@ public class User {
         return this;
     }
 
-    public User gender(String gender) {
+    public User gender(Gender gender) {
         this.gender = gender;
         return this;
     }
@@ -99,7 +102,7 @@ public class User {
         return lastName;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
@@ -131,7 +134,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -141,5 +144,9 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public enum Gender {
+        MALE, FEMALE, OTHER
     }
 }

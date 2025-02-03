@@ -8,16 +8,34 @@
 package com.shopbee.sb.user.service;
 
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
+import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
+import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 import static org.mapstruct.MappingConstants.ComponentModel.CDI;
 
-@Mapper(componentModel = CDI, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(
+    componentModel = CDI,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+    uses = GenderMapper.class
+)
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    @Mapping(target = "id", ignore = true)
+    User toUser(CreateUserRequest createUserRequest);
 
-    User map(CreateUserRequest createUserRequest);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    void patchUser(PatchUserByIdRequest patchUserByIdRequest, @MappingTarget User user);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
 }

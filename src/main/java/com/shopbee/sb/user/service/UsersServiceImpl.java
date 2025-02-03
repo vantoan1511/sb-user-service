@@ -14,22 +14,28 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
+    private final UserMapper userMapper;
+    private final GenderMapper genderMapper;
 
     @Inject
-    public UsersServiceImpl(UsersRepository usersRepository) {
+    public UsersServiceImpl(UsersRepository usersRepository,
+                            UserMapper userMapper,
+                            GenderMapper genderMapper) {
         this.usersRepository = usersRepository;
+        this.userMapper = userMapper;
+        this.genderMapper = genderMapper;
     }
 
     @Override
     @Transactional
     public String createUser(CreateUserRequest createUserRequest) throws UserServiceException {
-        User user = UserMapper.INSTANCE.map(createUserRequest);
+        //TODO: Validate request (username exists, email exists, valid gender, ...)
+        User user = userMapper.toUser(createUserRequest);
         usersRepository.persist(user);
         return user.getId();
     }
@@ -53,31 +59,22 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) throws UserServiceException {
-
+        User existingUser = getUserById(userId);
+        //TODO: Validate new email is linked to another user or not
+        userMapper.patchUser(patchUserByIdRequest, existingUser);
     }
 
     @Override
     @Transactional
     public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) throws UserServiceException {
-        User user = getUserById(userId);
-        user.setEmail(updateUserByIdRequest.getEmail()); //TODO: Validate new email is linked to another user or not
-        user.setFirstName(updateUserByIdRequest.getFirstName());
-        user.setLastName(updateUserByIdRequest.getLastName());
-        user.setBirthDate(updateUserByIdRequest.getBirthDate());
-        user.setPhone(updateUserByIdRequest.getPhone());
-        user.setGender(getGender(updateUserByIdRequest));
+        User existingUser = getUserById(userId);
+        //TODO: Validate new email is linked to another user or not
+        userMapper.updateUser(updateUserByIdRequest, existingUser);
     }
 
     private UserServiceException createUserNotFoundException(String userId) {
         String message = String.format("Cannot find user with id %s.", userId);
         return UserServiceException.create(UserServiceException.Type.NOT_FOUND, message);
-    }
-
-    private String getGender(UpdateUserByIdRequest updateUserByIdRequest) {
-        return Optional.ofNullable(updateUserByIdRequest)
-            .map(UpdateUserByIdRequest::getGender)
-            .map(UpdateUserByIdRequest.GenderEnum::value)
-            .orElse(null);
     }
 
 }
