@@ -24,6 +24,12 @@ public class UsersServiceExceptionMapper implements ExceptionMapper<UserServiceE
             .build();
     }
 
+    /**
+     * Gets response status.
+     *
+     * @param userServiceException the user service exception
+     * @return the response status
+     */
     private Response.Status getResponseStatus(UserServiceException userServiceException) {
         UserServiceException.Type type = userServiceException.getType();
         return switch (type) {

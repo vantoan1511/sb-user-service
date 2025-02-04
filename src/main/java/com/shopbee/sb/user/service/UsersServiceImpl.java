@@ -22,6 +22,13 @@ public class UsersServiceImpl implements UsersService {
     private final UserMapper userMapper;
     private final GenderMapper genderMapper;
 
+    /**
+     * Instantiates a new Users service.
+     *
+     * @param usersRepository the users repository
+     * @param userMapper      the user mapper
+     * @param genderMapper    the gender mapper
+     */
     @Inject
     public UsersServiceImpl(UsersRepository usersRepository,
                             UserMapper userMapper,
@@ -72,6 +79,12 @@ public class UsersServiceImpl implements UsersService {
         userMapper.updateUser(updateUserByIdRequest, existingUser);
     }
 
+    /**
+     * Create user not found exception user service exception.
+     *
+     * @param userId the user id
+     * @return the user service exception
+     */
     private UserServiceException createUserNotFoundException(String userId) {
         String message = String.format("Cannot find user with id %s.", userId);
         return UserServiceException.create(UserServiceException.Type.NOT_FOUND, message);

@@ -25,6 +25,12 @@ public class UsersApiImpl implements UsersApi {
     private final UsersService usersService;
     private final UriInfo uriInfo;
 
+    /**
+     * Instantiates a new Users api.
+     *
+     * @param usersService the users service
+     * @param uriInfo      the uri info
+     */
     @Inject
     public UsersApiImpl(UsersService usersService, UriInfo uriInfo) {
         this.usersService = usersService;
