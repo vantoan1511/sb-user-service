@@ -15,9 +15,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
-import org.apache.commons.lang3.EnumUtils;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.EnumUtils;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
