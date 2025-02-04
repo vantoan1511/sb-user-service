@@ -14,6 +14,16 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class UsersRepository implements PanacheRepositoryBase<User, String> {
 
     /**
+     * Existed by id boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
+    public boolean existedById(String id) {
+        return find("id", id).count() > 0;
+    }
+
+    /**
      * Existed by username boolean.
      *
      * @param username the username

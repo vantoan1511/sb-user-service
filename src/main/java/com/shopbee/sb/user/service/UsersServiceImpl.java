@@ -57,6 +57,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void deleteUserById(String userId) throws UserServiceException {
+        if (!usersRepository.existedById(userId)) {
+            throw createUserNotFoundException(userId);
+        }
+
         usersRepository.deleteById(userId);
     }
 
