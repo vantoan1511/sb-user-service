@@ -7,6 +7,7 @@
 
 package com.shopbee.sb.user.service;
 
+import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
@@ -21,7 +22,7 @@ public interface UsersService {
      * @return the created user id
      * @throws UserServiceException the user service exception
      */
-    String createUser(CreateUserRequest createUserRequest) throws UserServiceException;
+    CreateUser201Response createUser(CreateUserRequest createUserRequest) throws UserServiceException;
 
     /**
      * Delete user by id.

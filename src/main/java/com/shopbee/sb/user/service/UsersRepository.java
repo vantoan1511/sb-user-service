@@ -12,4 +12,25 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class UsersRepository implements PanacheRepositoryBase<User, String> {
+
+    /**
+     * Existed by username boolean.
+     *
+     * @param username the username
+     * @return the boolean
+     */
+    public boolean existedByUsername(String username) {
+        return find("username", username).count() > 0;
+    }
+
+    /**
+     * Existed by email boolean.
+     *
+     * @param email the email
+     * @return the boolean
+     */
+    public boolean existedByEmail(String email) {
+        return find("email", email).count() > 0;
+    }
+
 }

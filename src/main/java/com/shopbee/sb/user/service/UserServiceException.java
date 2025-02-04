@@ -7,53 +7,25 @@
 
 package com.shopbee.sb.user.service;
 
-public final class UserServiceException extends RuntimeException {
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 
-    private final Type type;
+public final class UserServiceException extends WebApplicationException {
 
-    /**
-     * Prevent creation of a new User service exception instance.
-     *
-     * @param type    the type
-     * @param message the message
-     */
-    private UserServiceException(Type type, String message) {
+    private UserServiceException(String message) {
         super(message);
-        this.type = type;
     }
 
-    /**
-     * Create user service exception.
-     *
-     * @param type    the type
-     * @param message the message
-     * @return the user service exception
-     */
-    public static UserServiceException create(Type type, String message) {
-        return new UserServiceException(type, message);
+    private UserServiceException(Response.Status status, String message) {
+        super(message, status);
     }
 
-    /**
-     * Create user service exception.
-     *
-     * @param message the message
-     * @return the user service exception
-     */
     public static UserServiceException create(String message) {
-        return new UserServiceException(Type.INTERNAL_ERROR, message);
+        return new UserServiceException(message);
     }
 
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public Type getType() {
-        return type;
+    public static UserServiceException create(Response.Status status, String message) {
+        return new UserServiceException(status, message);
     }
 
-    public enum Type {
-        NOT_FOUND,
-        INTERNAL_ERROR
-    }
 }

@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import java.util.Optional;
 
 @Provider
 public class UsersServiceExceptionMapper implements ExceptionMapper<UserServiceException> {
@@ -31,12 +32,11 @@ public class UsersServiceExceptionMapper implements ExceptionMapper<UserServiceE
      * @return the response status
      */
     private Response.Status getResponseStatus(UserServiceException userServiceException) {
-        UserServiceException.Type type = userServiceException.getType();
-        return switch (type) {
-            case NOT_FOUND -> Response.Status.NOT_FOUND;
-            case INTERNAL_ERROR -> Response.Status.INTERNAL_SERVER_ERROR;
-            case null -> Response.Status.SERVICE_UNAVAILABLE;
-        };
+        return Optional.ofNullable(userServiceException)
+            .map(UserServiceException::getResponse)
+            .map(Response::getStatusInfo)
+            .map(Response.StatusType::toEnum)
+            .orElse(Response.Status.SERVICE_UNAVAILABLE);
     }
 
 }

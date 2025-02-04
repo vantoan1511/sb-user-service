@@ -7,13 +7,17 @@
 
 package com.shopbee.sb.user.service;
 
+import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import org.apache.commons.lang3.EnumUtils;
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
@@ -40,11 +44,14 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public String createUser(CreateUserRequest createUserRequest) throws UserServiceException {
-        //TODO: Validate request (username exists, email exists, valid gender, ...)
+    public CreateUser201Response createUser(CreateUserRequest createUserRequest) throws UserServiceException {
+        validateCreateUserRequest(createUserRequest);
+
         User user = userMapper.toUser(createUserRequest);
+
         usersRepository.persist(user);
-        return user.getId();
+
+        return new CreateUser201Response().id(user.getId());
     }
 
     @Override
@@ -80,14 +87,35 @@ public class UsersServiceImpl implements UsersService {
     }
 
     /**
+     * Validate create user request.
+     *
+     * @param createUserRequest the create user request
+     */
+    private void validateCreateUserRequest(CreateUserRequest createUserRequest) {
+        if (usersRepository.existedByUsername(createUserRequest.getUsername())) {
+            throw UserServiceException.create(Response.Status.CONFLICT, String.format("Username [%s] existed.", createUserRequest.getUsername()));
+        }
+
+        if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
+            throw UserServiceException.create(Response.Status.CONFLICT, String.format("Email [%s] existed.", createUserRequest.getEmail()));
+        }
+
+        User.Gender gender = EnumUtils.getEnum(User.Gender.class, createUserRequest.getGender());
+        if (Objects.isNull(gender)) {
+            throw UserServiceException.create(Response.Status.BAD_REQUEST, String.format("Invalid gender request [%s].", createUserRequest.getGender()));
+        }
+    }
+
+    /**
      * Create user not found exception user service exception.
      *
      * @param userId the user id
      * @return the user service exception
      */
     private UserServiceException createUserNotFoundException(String userId) {
-        String message = String.format("Cannot find user with id %s.", userId);
-        return UserServiceException.create(UserServiceException.Type.NOT_FOUND, message);
+        String message = String.format("Cannot find user with id [%s].", userId);
+//        return UserServiceException.create(UserServiceException.Type.NOT_FOUND, message);
+        return UserServiceException.create(Response.Status.NOT_FOUND, message);
     }
 
 }

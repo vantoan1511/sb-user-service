@@ -8,6 +8,7 @@
 package com.shopbee.sb.user.service;
 
 import com.shopbee.sb.user.service.spec.v1.api.UsersApi;
+import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
@@ -39,9 +40,9 @@ public class UsersApiImpl implements UsersApi {
 
     @Override
     public Response createUser(@Valid @NotNull CreateUserRequest createUserRequest) {
-        String createdUserId = usersService.createUser(createUserRequest);
-        URI location = uriInfo.getAbsolutePathBuilder().path(createdUserId).build();
-        return Response.created(location).build();
+        CreateUser201Response createUser201Response = usersService.createUser(createUserRequest);
+        URI location = uriInfo.getAbsolutePathBuilder().path(createUser201Response.getId()).build();
+        return Response.created(location).entity(createUser201Response).build();
     }
 
     @Override
