@@ -14,13 +14,24 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class UsersRepository implements PanacheRepositoryBase<User, String> {
 
     /**
+     * Existed by email excluded by id boolean.
+     *
+     * @param email the email
+     * @param id    the id
+     * @return the boolean
+     */
+    public boolean existedByEmailExcludedById(String email, String id) {
+        return count("email = ?1 AND id != ?2", email, id) > 0;
+    }
+
+    /**
      * Existed by id boolean.
      *
      * @param id the id
      * @return the boolean
      */
     public boolean existedById(String id) {
-        return find("id", id).count() > 0;
+        return count("id", id) > 0;
     }
 
     /**
@@ -30,7 +41,7 @@ public class UsersRepository implements PanacheRepositoryBase<User, String> {
      * @return the boolean
      */
     public boolean existedByUsername(String username) {
-        return find("username", username).count() > 0;
+        return count("username", username) > 0;
     }
 
     /**
@@ -40,7 +51,7 @@ public class UsersRepository implements PanacheRepositoryBase<User, String> {
      * @return the boolean
      */
     public boolean existedByEmail(String email) {
-        return find("email", email).count() > 0;
+        return count("email", email) > 0;
     }
 
 }

@@ -77,17 +77,33 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) throws UserServiceException {
+        validateEmailChangeRequest(patchUserByIdRequest.getEmail(), userId);
+
         User existingUser = getUserById(userId);
-        //TODO: Validate new email is linked to another user or not
+
         userMapper.patchUser(patchUserByIdRequest, existingUser);
     }
 
     @Override
     @Transactional
     public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) throws UserServiceException {
+        validateEmailChangeRequest(updateUserByIdRequest.getEmail(), userId);
+
         User existingUser = getUserById(userId);
-        //TODO: Validate new email is linked to another user or not
+
         userMapper.updateUser(updateUserByIdRequest, existingUser);
+    }
+
+    /**
+     * Validate email change request.
+     *
+     * @param newEmail the new email
+     * @param userId   the user id
+     */
+    private void validateEmailChangeRequest(String newEmail, String userId) {
+        if (usersRepository.existedByEmailExcludedById(newEmail, userId)) {
+            throw createEmailExistedException(newEmail);
+        }
     }
 
     /**
@@ -101,7 +117,7 @@ public class UsersServiceImpl implements UsersService {
         }
 
         if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
-            throw UserServiceException.create(Response.Status.CONFLICT, String.format("Email [%s] existed.", createUserRequest.getEmail()));
+            throw createEmailExistedException(createUserRequest.getEmail());
         }
 
         User.Gender gender = EnumUtils.getEnum(User.Gender.class, createUserRequest.getGender());
@@ -118,8 +134,17 @@ public class UsersServiceImpl implements UsersService {
      */
     private UserServiceException createUserNotFoundException(String userId) {
         String message = String.format("Cannot find user with id [%s].", userId);
-//        return UserServiceException.create(UserServiceException.Type.NOT_FOUND, message);
         return UserServiceException.create(Response.Status.NOT_FOUND, message);
+    }
+
+    /**
+     * Create email existed exception user service exception.
+     *
+     * @param email the email
+     * @return the user service exception
+     */
+    private UserServiceException createEmailExistedException(String email) {
+        return UserServiceException.create(Response.Status.CONFLICT, String.format("Email [%s] existed.", email));
     }
 
 }
