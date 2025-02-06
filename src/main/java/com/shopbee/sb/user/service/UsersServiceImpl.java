@@ -15,31 +15,27 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import org.apache.commons.lang3.EnumUtils;
 import java.util.List;
 import java.util.Objects;
-import org.apache.commons.lang3.EnumUtils;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
     private final UserMapper userMapper;
-    private final GenderMapper genderMapper;
 
     /**
      * Instantiates a new Users service.
      *
      * @param usersRepository the users repository
      * @param userMapper      the user mapper
-     * @param genderMapper    the gender mapper
      */
     @Inject
     public UsersServiceImpl(UsersRepository usersRepository,
-                            UserMapper userMapper,
-                            GenderMapper genderMapper) {
+                            UserMapper userMapper) {
         this.usersRepository = usersRepository;
         this.userMapper = userMapper;
-        this.genderMapper = genderMapper;
     }
 
     @Override
