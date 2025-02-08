@@ -19,8 +19,57 @@
             <column name="LAST_NAME" type="VARCHAR(255)"/>
             <column name="GENDER" type="VARCHAR(10)"/>
             <column name="BIRTH_DATE" type="DATE"/>
-            <column name="PHONE" type="VARCHAR(20)"/>
+            <column name="STATUS" type="VARCHAR(10)"/>
+            <column name="CREATED_AT" type="TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP"/>
+            <column name="ADDRESS_ID" type="BIGINT"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="sb-user-service-2" author="shopbee">
+        <createTable tableName="sb_address">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NUMBER" type="VARCHAR(15)"/>
+            <column name="STREET" type="VARCHAR(15)"/>
+            <column name="WARD" type="VARCHAR(15)"/>
+            <column name="DISTRICT" type="VARCHAR(15)"/>
+            <column name="CITY" type="VARCHAR(15)"/>
+            <column name="PROVINCE" type="VARCHAR(15)"/>
+            <column name="COUNTRY" type="VARCHAR(2)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sb-user-service-3" author="shopbee">
+        <createTable tableName="sb_phone">
+            <column name="COUNTRY_CODE" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NUMBER" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="VARCHAR(36)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sb-user-service-4" author="shopbee">
+        <addPrimaryKey tableName="sb_phone" columnNames="COUNTRY_CODE, NUMBER" constraintName="pk_phone"/>
+    </changeSet>
+
+    <changeSet id="sb-user-service-5" author="shopbee">
+        <addForeignKeyConstraint baseTableName="sb_user"
+                                 baseColumnNames="ADDRESS_ID"
+                                 constraintName="fk_user_address"
+                                 referencedTableName="sb_address"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="sb_phone"
+                                 baseColumnNames="USER_ID"
+                                 constraintName="fk_phone_user"
+                                 referencedTableName="sb_user"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

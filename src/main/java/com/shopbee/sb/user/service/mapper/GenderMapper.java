@@ -7,7 +7,7 @@
 
 package com.shopbee.sb.user.service.mapper;
 
-import com.shopbee.sb.user.service.model.User;
+import com.shopbee.sb.user.service.model.Gender;
 import org.apache.commons.lang3.EnumUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -22,7 +22,7 @@ public interface GenderMapper {
      * @param gender the gender as string
      * @return the enum gender or null
      */
-    default User.Gender toGender(String gender) {
-        return EnumUtils.getEnum(User.Gender.class, gender);
+    default Gender toGender(String gender) {
+        return EnumUtils.getEnum(Gender.class, gender);
     }
 }

@@ -7,11 +7,12 @@
 
 package com.shopbee.sb.user.service.impl;
 
-import com.shopbee.sb.user.service.repository.UsersRepository;
 import com.shopbee.sb.user.service.UsersService;
 import com.shopbee.sb.user.service.exception.UserServiceException;
 import com.shopbee.sb.user.service.mapper.UserMapper;
+import com.shopbee.sb.user.service.model.Gender;
 import com.shopbee.sb.user.service.model.User;
+import com.shopbee.sb.user.service.repository.UsersRepository;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
@@ -20,9 +21,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
-import org.apache.commons.lang3.EnumUtils;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.EnumUtils;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
@@ -121,7 +122,7 @@ public class UsersServiceImpl implements UsersService {
             throw createEmailExistedException(createUserRequest.getEmail());
         }
 
-        User.Gender gender = EnumUtils.getEnum(User.Gender.class, createUserRequest.getGender());
+        Gender gender = EnumUtils.getEnum(Gender.class, createUserRequest.getGender());
         if (Objects.isNull(gender)) {
             throw UserServiceException.create(Response.Status.BAD_REQUEST, String.format("Invalid gender request [%s].", createUserRequest.getGender()));
         }

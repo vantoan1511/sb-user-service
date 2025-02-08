@@ -23,7 +23,7 @@ import org.mapstruct.ReportingPolicy;
     componentModel = MappingConstants.ComponentModel.CDI,
     unmappedTargetPolicy = ReportingPolicy.IGNORE,
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-    uses = GenderMapper.class
+    uses = {GenderMapper.class, AddressMapper.class, PhoneMapper.class}
 )
 public interface UserMapper {
 
