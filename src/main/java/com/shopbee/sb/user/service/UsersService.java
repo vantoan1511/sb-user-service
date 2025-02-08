@@ -11,6 +11,7 @@ import com.shopbee.sb.user.service.exception.UserServiceException;
 import com.shopbee.sb.user.service.model.User;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
+import com.shopbee.sb.user.service.spec.v1.dto.GetUsers200Response;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
 import java.util.List;
@@ -51,6 +52,15 @@ public interface UsersService {
      * @return the users
      */
     List<User> getUsers(Integer offset, Integer limit);
+
+    /**
+     * Gets paginated users.
+     *
+     * @param offset the offset
+     * @param limit  the limit
+     * @return the paginated users
+     */
+    GetUsers200Response getPaginatedUsers(Integer offset, Integer limit);
 
     /**
      * Patch user by id.

@@ -11,12 +11,15 @@ import com.shopbee.sb.user.service.UsersService;
 import com.shopbee.sb.user.service.exception.UserServiceException;
 import com.shopbee.sb.user.service.mapper.UserMapper;
 import com.shopbee.sb.user.service.model.Gender;
+import com.shopbee.sb.user.service.model.Phone;
 import com.shopbee.sb.user.service.model.User;
 import com.shopbee.sb.user.service.repository.UsersRepository;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
+import com.shopbee.sb.user.service.spec.v1.dto.GetUsers200Response;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
+import com.shopbee.sb.user.service.utils.PaginatedUsersResponseBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -50,6 +53,10 @@ public class UsersServiceImpl implements UsersService {
         validateCreateUserRequest(createUserRequest);
 
         User user = userMapper.toUser(createUserRequest);
+        Phone phone = user.getPhone();
+        if (Objects.nonNull(phone)) {
+            phone.setUser(user);
+        }
 
         usersRepository.persist(user);
 
@@ -74,6 +81,21 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<User> getUsers(Integer offset, Integer limit) {
         return usersRepository.findAll().page(offset, limit).list();
+    }
+
+    @Override
+    public GetUsers200Response getPaginatedUsers(Integer offset, Integer limit) {
+        validateGetPaginatedUsersRequest(offset, limit);
+
+        int totalUsers = Math.toIntExact(usersRepository.count());
+        List<User> paginatedUsers = usersRepository.findAll().page(offset, limit).list();
+        
+        return PaginatedUsersResponseBuilder.builder()
+            .offset(offset)
+            .limit(limit)
+            .totalItems(totalUsers)
+            .items(userMapper.toUsers(paginatedUsers))
+            .build();
     }
 
     @Override
@@ -125,6 +147,22 @@ public class UsersServiceImpl implements UsersService {
         Gender gender = EnumUtils.getEnum(Gender.class, createUserRequest.getGender());
         if (Objects.isNull(gender)) {
             throw UserServiceException.create(Response.Status.BAD_REQUEST, String.format("Invalid gender request [%s].", createUserRequest.getGender()));
+        }
+    }
+
+    /**
+     * Validate get paginated users request.
+     *
+     * @param offset the offset
+     * @param limit  the limit
+     */
+    private void validateGetPaginatedUsersRequest(Integer offset, Integer limit) {
+        if (offset < 0) {
+            throw UserServiceException.create(Response.Status.BAD_REQUEST, "Offset must be greater than or equal 0.");
+        }
+
+        if (limit < 1) {
+            throw UserServiceException.create(Response.Status.BAD_REQUEST, "Limit must be greater than 0.");
         }
     }
 

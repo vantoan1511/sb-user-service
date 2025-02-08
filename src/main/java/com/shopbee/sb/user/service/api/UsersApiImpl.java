@@ -59,7 +59,7 @@ public class UsersApiImpl implements UsersApi {
 
     @Override
     public Response getUsers(Integer offset, Integer limit) {
-        return Response.ok(usersService.getUsers(offset, limit)).build();
+        return Response.ok(usersService.getPaginatedUsers(offset, limit)).build();
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.shopbee.sb.user.service.model.User;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
+import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -37,6 +38,16 @@ public interface UserMapper {
     User toUser(CreateUserRequest createUserRequest);
 
     /**
+     * To user.
+     *
+     * @param user the user
+     * @return the user
+     */
+    @Mapping(target = "phone.countryCode", source = "phone.id.countryCode")
+    @Mapping(target = "phone.number", source = "phone.id.number")
+    com.shopbee.sb.user.service.spec.v1.dto.User toUser(User user);
+
+    /**
      * Patch user.
      *
      * @param patchUserByIdRequest the patch user by id request
@@ -57,4 +68,12 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", ignore = true)
     void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
+
+    /**
+     * To users list.
+     *
+     * @param users the users
+     * @return the list
+     */
+    List<com.shopbee.sb.user.service.spec.v1.dto.User> toUsers(List<User> users);
 }

@@ -10,6 +10,7 @@ package com.shopbee.sb.user.service.mapper;
 import com.shopbee.sb.user.service.model.Phone;
 import com.shopbee.sb.user.service.spec.v1.dto.UserPhone;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -22,6 +23,8 @@ public interface PhoneMapper {
      * @param phone the phone
      * @return the phone
      */
+    @Mapping(target = "id.countryCode", source = "countryCode")
+    @Mapping(target = "id.number", source = "number")
     Phone toPhone(UserPhone phone);
 
 }
