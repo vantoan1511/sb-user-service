@@ -5,8 +5,13 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.impl;
 
+import com.shopbee.sb.user.service.repository.UsersRepository;
+import com.shopbee.sb.user.service.UsersService;
+import com.shopbee.sb.user.service.exception.UserServiceException;
+import com.shopbee.sb.user.service.mapper.UserMapper;
+import com.shopbee.sb.user.service.model.User;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;

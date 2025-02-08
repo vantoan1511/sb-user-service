@@ -5,7 +5,7 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

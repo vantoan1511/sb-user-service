@@ -5,8 +5,9 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.mapper;
 
+import com.shopbee.sb.user.service.model.User;
 import org.apache.commons.lang3.EnumUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

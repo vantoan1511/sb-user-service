@@ -5,7 +5,7 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.exception;
 
 import java.io.Serializable;
 

@@ -5,8 +5,9 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.repository;
 
+import com.shopbee.sb.user.service.model.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 

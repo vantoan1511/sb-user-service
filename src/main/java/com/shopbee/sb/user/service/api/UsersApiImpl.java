@@ -5,8 +5,9 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.api;
 
+import com.shopbee.sb.user.service.UsersService;
 import com.shopbee.sb.user.service.spec.v1.api.UsersApi;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;

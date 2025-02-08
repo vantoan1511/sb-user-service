@@ -5,8 +5,9 @@
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service;
+package com.shopbee.sb.user.service.mapper;
 
+import com.shopbee.sb.user.service.model.User;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
 import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
