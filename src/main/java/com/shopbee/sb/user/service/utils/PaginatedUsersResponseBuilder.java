@@ -11,7 +11,7 @@ import com.shopbee.sb.user.service.spec.v1.dto.GetUsers200Response;
 import com.shopbee.sb.user.service.spec.v1.dto.User;
 import java.util.List;
 
-public class PaginatedUsersResponseBuilder {
+public final class PaginatedUsersResponseBuilder {
 
     private int totalItems;
 

@@ -15,6 +15,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PhoneRepository implements PanacheRepositoryBase<Phone, PhoneId> {
 
+    /**
+     * Existed by id boolean.
+     *
+     * @param phoneId the phone id
+     * @return the boolean
+     */
     public boolean existedById(PhoneId phoneId) {
         return findByIdOptional(phoneId).isPresent();
     }

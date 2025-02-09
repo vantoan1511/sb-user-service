@@ -15,6 +15,7 @@ import com.shopbee.sb.user.service.model.Gender;
 import com.shopbee.sb.user.service.model.Phone;
 import com.shopbee.sb.user.service.model.PhoneId;
 import com.shopbee.sb.user.service.model.User;
+import com.shopbee.sb.user.service.model.UserStatus;
 import com.shopbee.sb.user.service.repository.PhoneRepository;
 import com.shopbee.sb.user.service.repository.UsersRepository;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
@@ -42,7 +43,9 @@ public class UsersServiceImpl implements UsersService {
      * Instantiates a new Users service.
      *
      * @param usersRepository the users repository
+     * @param phoneRepository the phone repository
      * @param userMapper      the user mapper
+     * @param phoneMapper     the phone mapper
      */
     @Inject
     public UsersServiceImpl(UsersRepository usersRepository,
@@ -144,25 +147,77 @@ public class UsersServiceImpl implements UsersService {
      * @param createUserRequest the create user request
      */
     private void validateCreateUserRequest(CreateUserRequest createUserRequest) {
-        if (usersRepository.existedByUsername(createUserRequest.getUsername())) {
-            throw UserServiceException.createConflict(String.format("Username [%s] existed.", createUserRequest.getUsername()));
-        }
+        validateGender(createUserRequest);
+        validateStatus(createUserRequest);
+        validateUsername(createUserRequest);
+        validateEmail(createUserRequest);
+        validatePhone(createUserRequest);
+    }
 
-        if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
-            throw createEmailExistedException(createUserRequest.getEmail());
-        }
-
-        Gender gender = EnumUtils.getEnum(Gender.class, createUserRequest.getGender());
+    /**
+     * Validate gender.
+     *
+     * @param createUserRequest the create user request
+     */
+    private static void validateGender(CreateUserRequest createUserRequest) {
+        String requestGender = createUserRequest.getGender();
+        Gender gender = EnumUtils.getEnum(Gender.class, requestGender);
         if (Objects.isNull(gender)) {
-            throw UserServiceException.createConflict(String.format("Invalid gender request [%s].", createUserRequest.getGender()));
+            throw UserServiceException.createBadRequest(String.format("Invalid gender request [%s].", requestGender));
+        }
+    }
+
+    /**
+     * Validate status.
+     *
+     * @param createUserRequest the create user request
+     */
+    private void validateStatus(CreateUserRequest createUserRequest) {
+        String requestStatus = createUserRequest.getStatus();
+        UserStatus status = EnumUtils.getEnum(UserStatus.class, requestStatus);
+        if (Objects.isNull(status)) {
+            throw UserServiceException.createBadRequest(String.format("Invalid user status request [%s].", requestStatus));
+        }
+    }
+
+    /**
+     * Validate phone.
+     *
+     * @param createUserRequest the create user request
+     */
+    private void validatePhone(CreateUserRequest createUserRequest) {
+        Phone phone = phoneMapper.toPhone(createUserRequest.getPhone());
+        if (Objects.isNull(phone)) {
+            return;
         }
 
-        Phone phone = phoneMapper.toPhone(createUserRequest.getPhone());
-        if (Objects.nonNull(phone)) {
-            PhoneId phoneId = phone.getId();
-            if (phoneRepository.existedById(phoneId)) {
-                throw UserServiceException.createConflict(String.format("Phone [%s%s] linked to another user.", phoneId.getCountryCode(), phoneId.getNumber()));
-            }
+        PhoneId phoneId = phone.getId();
+        if (phoneRepository.existedById(phoneId)) {
+            throw UserServiceException.createConflict(String.format("Phone [%s%s] linked to another user.", phoneId.getCountryCode(), phoneId.getNumber()));
+        }
+    }
+
+    /**
+     * Validate email.
+     *
+     * @param createUserRequest the create user request
+     */
+    private void validateEmail(CreateUserRequest createUserRequest) {
+        String email = createUserRequest.getEmail();
+        if (usersRepository.existedByEmail(email)) {
+            throw createEmailExistedException(email);
+        }
+    }
+
+    /**
+     * Validate username.
+     *
+     * @param createUserRequest the create user request
+     */
+    private void validateUsername(CreateUserRequest createUserRequest) {
+        String username = createUserRequest.getUsername();
+        if (usersRepository.existedByUsername(username)) {
+            throw UserServiceException.createConflict(String.format("Username [%s] existed.", username));
         }
     }
 
