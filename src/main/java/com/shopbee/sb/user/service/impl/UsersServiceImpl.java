@@ -89,7 +89,7 @@ public class UsersServiceImpl implements UsersService {
 
         int totalUsers = Math.toIntExact(usersRepository.count());
         List<User> paginatedUsers = usersRepository.findAll().page(offset, limit).list();
-        
+
         return PaginatedUsersResponseBuilder.builder()
             .offset(offset)
             .limit(limit)
@@ -157,11 +157,11 @@ public class UsersServiceImpl implements UsersService {
      * @param limit  the limit
      */
     private void validateGetPaginatedUsersRequest(Integer offset, Integer limit) {
-        if (offset < 0) {
+        if (Objects.isNull(offset) || offset < 0) {
             throw UserServiceException.create(Response.Status.BAD_REQUEST, "Offset must be greater than or equal 0.");
         }
 
-        if (limit < 1) {
+        if (Objects.isNull(limit) || limit < 1) {
             throw UserServiceException.create(Response.Status.BAD_REQUEST, "Limit must be greater than 0.");
         }
     }
