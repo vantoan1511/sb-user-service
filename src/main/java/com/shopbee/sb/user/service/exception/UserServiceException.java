@@ -52,4 +52,15 @@ public final class UserServiceException extends WebApplicationException {
         return new UserServiceException(status, message);
     }
 
+    public static UserServiceException createBadRequest(String message) {
+        return create(Response.Status.BAD_REQUEST, message);
+    }
+
+    public static UserServiceException createNotFound(String message) {
+        return create(Response.Status.NOT_FOUND, message);
+    }
+
+    public static UserServiceException createConflict(String message) {
+        return create(Response.Status.CONFLICT, message);
+    }
 }

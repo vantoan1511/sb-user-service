@@ -25,7 +25,7 @@ public interface UsersService {
      * @return the created user id
      * @throws UserServiceException the user service exception
      */
-    CreateUser201Response createUser(CreateUserRequest createUserRequest) throws UserServiceException;
+    CreateUser201Response createUser(CreateUserRequest createUserRequest);
 
     /**
      * Delete user by id.
@@ -33,7 +33,7 @@ public interface UsersService {
      * @param userId the user id
      * @throws UserServiceException the user service exception
      */
-    void deleteUserById(String userId) throws UserServiceException;
+    void deleteUserById(String userId);
 
     /**
      * Gets user by id.
@@ -42,7 +42,7 @@ public interface UsersService {
      * @return the user by id
      * @throws UserServiceException the user service exception
      */
-    User getUserById(String userId) throws UserServiceException;
+    User getUserById(String userId);
 
     /**
      * Gets users.
@@ -69,7 +69,7 @@ public interface UsersService {
      * @param patchUserByIdRequest the patch user by id request
      * @throws UserServiceException the user service exception
      */
-    void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) throws UserServiceException;
+    void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest);
 
     /**
      * Update user by id.
@@ -78,5 +78,5 @@ public interface UsersService {
      * @param updateUserByIdRequest the update user by id request
      * @throws UserServiceException the user service exception
      */
-    void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) throws UserServiceException;
+    void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest);
 }

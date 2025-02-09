@@ -9,10 +9,13 @@ package com.shopbee.sb.user.service.impl;
 
 import com.shopbee.sb.user.service.UsersService;
 import com.shopbee.sb.user.service.exception.UserServiceException;
+import com.shopbee.sb.user.service.mapper.PhoneMapper;
 import com.shopbee.sb.user.service.mapper.UserMapper;
 import com.shopbee.sb.user.service.model.Gender;
 import com.shopbee.sb.user.service.model.Phone;
+import com.shopbee.sb.user.service.model.PhoneId;
 import com.shopbee.sb.user.service.model.User;
+import com.shopbee.sb.user.service.repository.PhoneRepository;
 import com.shopbee.sb.user.service.repository.UsersRepository;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUser201Response;
 import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
@@ -23,7 +26,6 @@ import com.shopbee.sb.user.service.utils.PaginatedUsersResponseBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.EnumUtils;
@@ -32,7 +34,9 @@ import org.apache.commons.lang3.EnumUtils;
 public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
+    private final PhoneRepository phoneRepository;
     private final UserMapper userMapper;
+    private final PhoneMapper phoneMapper;
 
     /**
      * Instantiates a new Users service.
@@ -42,14 +46,18 @@ public class UsersServiceImpl implements UsersService {
      */
     @Inject
     public UsersServiceImpl(UsersRepository usersRepository,
-                            UserMapper userMapper) {
+                            PhoneRepository phoneRepository,
+                            UserMapper userMapper,
+                            PhoneMapper phoneMapper) {
         this.usersRepository = usersRepository;
+        this.phoneRepository = phoneRepository;
         this.userMapper = userMapper;
+        this.phoneMapper = phoneMapper;
     }
 
     @Override
     @Transactional
-    public CreateUser201Response createUser(CreateUserRequest createUserRequest) throws UserServiceException {
+    public CreateUser201Response createUser(CreateUserRequest createUserRequest) {
         validateCreateUserRequest(createUserRequest);
 
         User user = userMapper.toUser(createUserRequest);
@@ -65,7 +73,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void deleteUserById(String userId) throws UserServiceException {
+    public void deleteUserById(String userId) {
         if (!usersRepository.existedById(userId)) {
             throw createUserNotFoundException(userId);
         }
@@ -74,7 +82,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public User getUserById(String userId) throws UserServiceException {
+    public User getUserById(String userId) {
         return usersRepository.findByIdOptional(userId).orElseThrow(() -> createUserNotFoundException(userId));
     }
 
@@ -100,7 +108,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) throws UserServiceException {
+    public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) {
         validateEmailChangeRequest(patchUserByIdRequest.getEmail(), userId);
 
         User existingUser = getUserById(userId);
@@ -110,7 +118,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) throws UserServiceException {
+    public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) {
         validateEmailChangeRequest(updateUserByIdRequest.getEmail(), userId);
 
         User existingUser = getUserById(userId);
@@ -137,7 +145,7 @@ public class UsersServiceImpl implements UsersService {
      */
     private void validateCreateUserRequest(CreateUserRequest createUserRequest) {
         if (usersRepository.existedByUsername(createUserRequest.getUsername())) {
-            throw UserServiceException.create(Response.Status.CONFLICT, String.format("Username [%s] existed.", createUserRequest.getUsername()));
+            throw UserServiceException.createConflict(String.format("Username [%s] existed.", createUserRequest.getUsername()));
         }
 
         if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
@@ -146,7 +154,15 @@ public class UsersServiceImpl implements UsersService {
 
         Gender gender = EnumUtils.getEnum(Gender.class, createUserRequest.getGender());
         if (Objects.isNull(gender)) {
-            throw UserServiceException.create(Response.Status.BAD_REQUEST, String.format("Invalid gender request [%s].", createUserRequest.getGender()));
+            throw UserServiceException.createConflict(String.format("Invalid gender request [%s].", createUserRequest.getGender()));
+        }
+
+        Phone phone = phoneMapper.toPhone(createUserRequest.getPhone());
+        if (Objects.nonNull(phone)) {
+            PhoneId phoneId = phone.getId();
+            if (phoneRepository.existedById(phoneId)) {
+                throw UserServiceException.createConflict(String.format("Phone [%s%s] linked to another user.", phoneId.getCountryCode(), phoneId.getNumber()));
+            }
         }
     }
 
@@ -158,11 +174,11 @@ public class UsersServiceImpl implements UsersService {
      */
     private void validateGetPaginatedUsersRequest(Integer offset, Integer limit) {
         if (Objects.isNull(offset) || offset < 0) {
-            throw UserServiceException.create(Response.Status.BAD_REQUEST, "Offset must be greater than or equal 0.");
+            throw UserServiceException.createBadRequest("Offset must be greater than or equal 0.");
         }
 
         if (Objects.isNull(limit) || limit < 1) {
-            throw UserServiceException.create(Response.Status.BAD_REQUEST, "Limit must be greater than 0.");
+            throw UserServiceException.createBadRequest("Limit must be greater than 0.");
         }
     }
 
@@ -173,8 +189,7 @@ public class UsersServiceImpl implements UsersService {
      * @return the user service exception
      */
     private UserServiceException createUserNotFoundException(String userId) {
-        String message = String.format("Cannot find user with id [%s].", userId);
-        return UserServiceException.create(Response.Status.NOT_FOUND, message);
+        return UserServiceException.createNotFound(String.format("Cannot find user with id [%s].", userId));
     }
 
     /**
@@ -184,7 +199,7 @@ public class UsersServiceImpl implements UsersService {
      * @return the user service exception
      */
     private UserServiceException createEmailExistedException(String email) {
-        return UserServiceException.create(Response.Status.CONFLICT, String.format("Email [%s] existed.", email));
+        return UserServiceException.createConflict(String.format("Email [%s] existed.", email));
     }
 
 }
