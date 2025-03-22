@@ -1,17 +1,16 @@
 /*
  * UserMapper.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.mapper;
+package com.shopbee.user.mapper;
 
-import com.shopbee.sb.user.service.model.User;
-import com.shopbee.sb.user.service.spec.v1.dto.CreateUserRequest;
-import com.shopbee.sb.user.service.spec.v1.dto.PatchUserByIdRequest;
-import com.shopbee.sb.user.service.spec.v1.dto.UpdateUserByIdRequest;
-import java.util.List;
+import com.shopbee.user.entity.User;
+import com.shopbee.user.v1.dto.CreateUserRequest;
+import com.shopbee.user.v1.dto.PatchUserByIdRequest;
+import com.shopbee.user.v1.dto.UpdateUserByIdRequest;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,6 +18,8 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
 
 @Mapper(
     componentModel = MappingConstants.ComponentModel.CDI,
@@ -45,7 +46,7 @@ public interface UserMapper {
      */
     @Mapping(target = "phone.countryCode", source = "phone.id.countryCode")
     @Mapping(target = "phone.number", source = "phone.id.number")
-    com.shopbee.sb.user.service.spec.v1.dto.User toUser(User user);
+    com.shopbee.user.v1.dto.User toUser(User user);
 
     /**
      * Patch user.
@@ -56,6 +57,7 @@ public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", ignore = true)
+    @Mapping(target = "phone", ignore = true)
     void patchUser(PatchUserByIdRequest patchUserByIdRequest, @MappingTarget User user);
 
     /**
@@ -67,6 +69,7 @@ public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", ignore = true)
+    @Mapping(target = "phone", ignore = true)
     void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
 
     /**
@@ -75,5 +78,5 @@ public interface UserMapper {
      * @param users the users
      * @return the list
      */
-    List<com.shopbee.sb.user.service.spec.v1.dto.User> toUsers(List<User> users);
+    List<com.shopbee.user.v1.dto.User> toUsers(List<User> users);
 }

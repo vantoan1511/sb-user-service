@@ -1,13 +1,13 @@
 /*
  * GenderMapper.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.mapper;
+package com.shopbee.user.mapper;
 
-import com.shopbee.sb.user.service.model.Gender;
+import com.shopbee.user.entity.Gender;
 import org.apache.commons.lang3.EnumUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

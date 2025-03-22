@@ -1,13 +1,13 @@
 /*
  * UsersRepository.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.repository;
+package com.shopbee.user.repository;
 
-import com.shopbee.sb.user.service.model.User;
+import com.shopbee.user.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 

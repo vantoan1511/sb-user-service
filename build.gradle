@@ -49,7 +49,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
     implementation 'io.quarkus:quarkus-liquibase'
 
-    implementation 'com.shopbee.sb:sb-user-service-api-spec:1.1.2'
+    // shopbee dependencies
+    implementation 'com.shopbee.user:shopbee-user-service-api:1.0.0'
 
     // testing
     testImplementation 'io.quarkus:quarkus-junit5'

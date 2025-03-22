@@ -1,6 +1,6 @@
-# sb-user-service
+# shopbee-user-service
 
-The implementation of the sb-user-service.
+The implementation of the shopbee-user-service.
 
 ## Getting Started
 

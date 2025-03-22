@@ -1,11 +1,11 @@
 /*
  * UsersServiceExceptionMapper.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.exception;
+package com.shopbee.user.exception;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,7 +20,7 @@ public class UsersServiceExceptionMapper implements ExceptionMapper<UserServiceE
     public Response toResponse(UserServiceException userServiceException) {
         Response.Status status = getResponseStatus(userServiceException);
         return Response.status(status)
-            .entity(ErrorMessage.create(userServiceException.getMessage()))
+            .entity(new ErrorMessage(userServiceException.getMessage()))
             .type(MediaType.APPLICATION_JSON)
             .build();
     }

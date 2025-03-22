@@ -1,11 +1,11 @@
 /*
  * UserServiceException.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.exception;
+package com.shopbee.user.exception;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;

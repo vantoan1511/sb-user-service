@@ -1,14 +1,13 @@
 /*
  * AddressMapper.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.mapper;
+package com.shopbee.user.mapper;
 
-import com.shopbee.sb.user.service.model.Address;
-import com.shopbee.sb.user.service.spec.v1.dto.UserAddress;
+import com.shopbee.user.entity.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
@@ -22,6 +21,6 @@ public interface AddressMapper {
      * @param address the address
      * @return the address
      */
-    Address toAddress(UserAddress address);
+    Address toAddress(com.shopbee.user.v1.dto.Address address);
 
 }

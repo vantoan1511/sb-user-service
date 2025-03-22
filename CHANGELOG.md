@@ -1,4 +1,4 @@
-# sb-user-service
+# shopbee-user-service
 
 All notable changes to this project will be documented in this file.
 

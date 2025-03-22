@@ -9,4 +9,4 @@ pluginManagement {
     }
 }
 
-rootProject.name    = 'sb-user-service'
+rootProject.name    = 'shopbee-user-service'

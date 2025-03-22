@@ -1,14 +1,13 @@
 /*
  * PhoneMapper.java
  *
- * Copyright by sb-user-service, all rights reserved.
+ * Copyright by  shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
-package com.shopbee.sb.user.service.mapper;
+package com.shopbee.user.mapper;
 
-import com.shopbee.sb.user.service.model.Phone;
-import com.shopbee.sb.user.service.spec.v1.dto.UserPhone;
+import com.shopbee.user.entity.Phone;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -25,6 +24,6 @@ public interface PhoneMapper {
      */
     @Mapping(target = "id.countryCode", source = "countryCode")
     @Mapping(target = "id.number", source = "number")
-    Phone toPhone(UserPhone phone);
+    Phone toPhone(com.shopbee.user.v1.dto.Phone phone);
 
 }
