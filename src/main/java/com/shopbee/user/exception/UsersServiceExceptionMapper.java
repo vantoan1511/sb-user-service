@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+
 import java.util.Optional;
 
 @Provider
@@ -36,7 +37,7 @@ public class UsersServiceExceptionMapper implements ExceptionMapper<UserServiceE
             .map(UserServiceException::getResponse)
             .map(Response::getStatusInfo)
             .map(Response.StatusType::toEnum)
-            .orElse(Response.Status.SERVICE_UNAVAILABLE);
+            .orElse(Response.Status.INTERNAL_SERVER_ERROR);
     }
 
 }

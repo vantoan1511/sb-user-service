@@ -12,14 +12,6 @@ import jakarta.ws.rs.core.Response;
 
 public final class UserServiceException extends WebApplicationException {
 
-    /**
-     * Prevent creation of a new User service exception instance.
-     *
-     * @param message the message
-     */
-    private UserServiceException(String message) {
-        super(message);
-    }
 
     /**
      * Prevent creation of a new User service exception instance.
@@ -34,16 +26,6 @@ public final class UserServiceException extends WebApplicationException {
     /**
      * Create user service exception.
      *
-     * @param message the message
-     * @return the user service exception
-     */
-    public static UserServiceException create(String message) {
-        return new UserServiceException(message);
-    }
-
-    /**
-     * Create user service exception.
-     *
      * @param status  the status
      * @param message the message
      * @return the user service exception
@@ -53,12 +35,22 @@ public final class UserServiceException extends WebApplicationException {
     }
 
     /**
+     * Create user service exception.
+     *
+     * @param message the message
+     * @return the user service exception
+     */
+    public static UserServiceException error(String message) {
+        return new UserServiceException(Response.Status.INTERNAL_SERVER_ERROR, message);
+    }
+
+    /**
      * Create bad request user service exception.
      *
      * @param message the message
      * @return the user service exception
      */
-    public static UserServiceException createBadRequest(String message) {
+    public static UserServiceException badRequest(String message) {
         return create(Response.Status.BAD_REQUEST, message);
     }
 
@@ -68,7 +60,7 @@ public final class UserServiceException extends WebApplicationException {
      * @param message the message
      * @return the user service exception
      */
-    public static UserServiceException createNotFound(String message) {
+    public static UserServiceException notFound(String message) {
         return create(Response.Status.NOT_FOUND, message);
     }
 
@@ -78,7 +70,11 @@ public final class UserServiceException extends WebApplicationException {
      * @param message the message
      * @return the user service exception
      */
-    public static UserServiceException createConflict(String message) {
+    public static UserServiceException conflict(String message) {
         return create(Response.Status.CONFLICT, message);
+    }
+
+    public static UserServiceException notImplemented(String message) {
+        return create(Response.Status.NOT_IMPLEMENTED, message);
     }
 }

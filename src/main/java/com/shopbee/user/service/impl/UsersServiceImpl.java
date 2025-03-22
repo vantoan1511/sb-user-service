@@ -7,6 +7,7 @@
 
 package com.shopbee.user.service.impl;
 
+import com.shopbee.user.exception.UserServiceException;
 import com.shopbee.user.mapper.PhoneMapper;
 import com.shopbee.user.mapper.UserMapper;
 import com.shopbee.user.repository.PhoneRepository;
@@ -52,57 +53,57 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public String createUser(CreateUserRequest createUserRequest) {
-        return "";
-    }
-
-    @Override
-    public String createUserAddress(String userId, CreateUserAddressRequest createUserAddressRequest) {
-        return "";
-    }
-
-    @Override
-    public void deleteUserAddress(String userId, String addressId) {
-
-    }
-
-    @Override
-    public void deleteUserById(String userId) {
-
-    }
-
-    @Override
-    public List<Address> getUserAddresses(String userId, Integer offset, Integer limit) {
-        return List.of();
+    public List<User> getUsers(Integer offset, Integer limit) {
+        throw UserServiceException.notImplemented("Operation not implemented");
     }
 
     @Override
     public User getUserById(String userId) {
-        return null;
+        throw UserServiceException.notImplemented("Operation not implemented");
     }
 
     @Override
-    public List<User> getUsers(Integer offset, Integer limit) {
-        return List.of();
-    }
-
-    @Override
-    public void patchUserAddress(String userId, String addressId, PatchUserAddressRequest patchUserAddressRequest) {
-
-    }
-
-    @Override
-    public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) {
-
-    }
-
-    @Override
-    public void updateUserAddress(String userId, String addressId, CreateUserAddressRequest createUserAddressRequest) {
-
+    public String createUser(CreateUserRequest createUserRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
     }
 
     @Override
     public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
 
+    @Override
+    public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public void deleteUserById(String userId) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public List<Address> getUserAddresses(String userId, Integer offset, Integer limit) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public String createUserAddress(String userId, CreateUserAddressRequest createUserAddressRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public void updateUserAddress(String userId, String addressId, CreateUserAddressRequest createUserAddressRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public void patchUserAddress(String userId, String addressId, PatchUserAddressRequest patchUserAddressRequest) {
+        throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    @Override
+    public void deleteUserAddress(String userId, String addressId) {
+        throw UserServiceException.notImplemented("Operation not implemented");
     }
 }

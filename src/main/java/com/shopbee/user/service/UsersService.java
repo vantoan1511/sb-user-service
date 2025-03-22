@@ -19,25 +19,25 @@ import java.util.List;
 
 public interface UsersService {
 
+    List<User> getUsers(Integer offset, Integer limit);
+
+    User getUserById(String userId);
+
     String createUser(CreateUserRequest createUserRequest);
 
-    String createUserAddress(String userId, CreateUserAddressRequest createUserAddressRequest);
+    void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest);
 
-    void deleteUserAddress(String userId, String addressId);
+    void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest);
 
     void deleteUserById(String userId);
 
     List<Address> getUserAddresses(String userId, Integer offset, Integer limit);
 
-    User getUserById(String userId);
+    String createUserAddress(String userId, CreateUserAddressRequest createUserAddressRequest);
 
-    List<User> getUsers(Integer offset, Integer limit);
+    void updateUserAddress(String userId, String addressId, CreateUserAddressRequest createUserAddressRequest);
 
-    void patchUserAddress( String userId,  String addressId,  PatchUserAddressRequest patchUserAddressRequest);
+    void patchUserAddress(String userId, String addressId, PatchUserAddressRequest patchUserAddressRequest);
 
-    void patchUserById( String userId,  PatchUserByIdRequest patchUserByIdRequest);
-
-    void updateUserAddress( String userId,  String addressId,  CreateUserAddressRequest createUserAddressRequest);
-
-    void updateUserById( String userId,  UpdateUserByIdRequest updateUserByIdRequest);
+    void deleteUserAddress(String userId, String addressId);
 }
