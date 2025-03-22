@@ -32,7 +32,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sb_user")
+@Table(name = "shopbee_user")
 public class User {
 
     @Id

@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sb_phone")
+@Table(name = "shopbee_phone")
 public class Phone {
 
     @EmbeddedId

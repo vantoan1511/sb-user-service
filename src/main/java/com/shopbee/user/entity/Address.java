@@ -23,15 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sb_address")
+@Table(name = "shopbee_address")
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private String number;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column
     private String street;
@@ -45,10 +42,7 @@ public class Address {
     @Column
     private String city;
 
-    @Column
-    private String province;
-
-    @Column
-    private String country;
+    @Column(name = "postal_code")
+    private String postalCode;
 
 }
