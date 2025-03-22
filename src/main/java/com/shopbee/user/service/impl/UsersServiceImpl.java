@@ -22,8 +22,10 @@ import com.shopbee.user.v1.dto.UpdateUserByIdRequest;
 import com.shopbee.user.v1.dto.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
@@ -54,27 +56,51 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<User> getUsers(Integer offset, Integer limit) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        return usersRepository.findAll()
+            .page(Optional.ofNullable(offset).orElse(0), Optional.ofNullable(limit).orElse(20))
+            .stream()
+            .map(userMapper::toUser)
+            .toList();
     }
 
     @Override
     public User getUserById(String userId) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        return usersRepository.findByIdOptional(userId)
+            .map(userMapper::toUser)
+            .orElseThrow(() -> UserServiceException.notFound("User not found"));
     }
 
     @Override
+    @Transactional
     public String createUser(CreateUserRequest createUserRequest) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        validateCreateUserRequest(createUserRequest);
+
+        com.shopbee.user.entity.User user = userMapper.toUser(createUserRequest);
+
+        usersRepository.persist(user);
+
+        return user.getId();
     }
 
     @Override
+    @Transactional
     public void updateUserById(String userId, UpdateUserByIdRequest updateUserByIdRequest) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        validateUpdateEmail(userId, updateUserByIdRequest.getEmail());
+
+        com.shopbee.user.entity.User user = usersRepository.findByIdOptional(userId)
+            .orElseThrow(() -> UserServiceException.notFound("User not found"));
+
+        userMapper.updateUser(updateUserByIdRequest, user);
     }
 
     @Override
     public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        validateUpdateEmail(userId, patchUserByIdRequest.getEmail());
+
+        com.shopbee.user.entity.User user = usersRepository.findByIdOptional(userId)
+            .orElseThrow(() -> UserServiceException.notFound("User not found"));
+
+        userMapper.patchUser(patchUserByIdRequest, user);
     }
 
     @Override
@@ -105,5 +131,28 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void deleteUserAddress(String userId, String addressId) {
         throw UserServiceException.notImplemented("Operation not implemented");
+    }
+
+    private void validateCreateUserRequest(CreateUserRequest createUserRequest) {
+        validateUniqueEmail(createUserRequest);
+        validateUniqueUsername(createUserRequest);
+    }
+
+    private void validateUniqueUsername(CreateUserRequest createUserRequest) {
+        if (usersRepository.existedByUsername(createUserRequest.getUsername())) {
+            throw UserServiceException.conflict("User with username already exists");
+        }
+    }
+
+    private void validateUniqueEmail(CreateUserRequest createUserRequest) {
+        if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
+            throw UserServiceException.conflict("User with email already exists");
+        }
+    }
+
+    private void validateUpdateEmail(String userId, String email) {
+        if (usersRepository.existedByEmailExcludedById(email, userId)) {
+            throw UserServiceException.conflict("User with email already exists");
+        }
     }
 }

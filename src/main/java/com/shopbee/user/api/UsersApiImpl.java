@@ -19,6 +19,8 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
@@ -79,7 +81,7 @@ public class UsersApiImpl implements UsersApi {
     }
 
     @Override
-    public Response getUsers(@Min(0L) Integer offset, @Min(1L) Integer limit) {
+    public Response getUsers(@QueryParam("offset") @DefaultValue("0") @Min(0L) Integer offset, @QueryParam("limit") @DefaultValue("20") @Min(1L) Integer limit) {
         return Response.ok(usersService.getUsers(offset, limit)).build();
     }
 
