@@ -7,7 +7,6 @@
 
 package com.shopbee.user.mapper;
 
-import com.shopbee.user.entity.Gender;
 import org.apache.commons.lang3.EnumUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

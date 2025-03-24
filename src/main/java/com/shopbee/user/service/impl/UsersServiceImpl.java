@@ -51,7 +51,8 @@ public class UsersServiceImpl implements UsersService {
      */
     @Inject
     public UsersServiceImpl(UsersRepository usersRepository,
-                            PhoneRepository phoneRepository, AddressRepository addressRepository,
+                            PhoneRepository phoneRepository,
+                            AddressRepository addressRepository,
                             UserMapper userMapper,
                             PhoneMapper phoneMapper,
                             AddressMapper addressMapper) {

@@ -30,6 +30,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/**
+ * The type User.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -79,9 +82,27 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Phone phone;
 
+    /**
+     * Add address.
+     *
+     * @param address the address
+     */
     public void addAddress(Address address) {
         addresses.add(address);
         address.setUser(this);
     }
 
+    /**
+     * The enum Gender.
+     */
+    public enum Gender {
+        MALE, FEMALE, OTHER
+    }
+
+    /**
+     * The enum User status.
+     */
+    public enum UserStatus {
+        ACTIVE, INACTIVE, SUSPENDED
+    }
 }
