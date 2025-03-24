@@ -1,7 +1,7 @@
 /*
  * PhoneRepository.java
  *
- * Copyright by  shopbee-user-service, all rights reserved.
+ * Copyright by shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 

@@ -1,7 +1,7 @@
 /*
  * UserMapper.java
  *
- * Copyright by  shopbee-user-service, all rights reserved.
+ * Copyright by shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
@@ -11,6 +11,7 @@ import com.shopbee.user.entity.User;
 import com.shopbee.user.v1.dto.CreateUserRequest;
 import com.shopbee.user.v1.dto.PatchUserByIdRequest;
 import com.shopbee.user.v1.dto.UpdateUserByIdRequest;
+import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,13 +20,11 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-
 @Mapper(
-    componentModel = MappingConstants.ComponentModel.CDI,
-    unmappedTargetPolicy = ReportingPolicy.IGNORE,
-    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-    uses = {GenderMapper.class, AddressMapper.class, PhoneMapper.class}
+        componentModel = MappingConstants.ComponentModel.CDI,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        uses = {AddressMapper.class, PhoneMapper.class}
 )
 public interface UserMapper {
 

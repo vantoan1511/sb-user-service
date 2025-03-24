@@ -1,7 +1,7 @@
 /*
  * User.java
  *
- * Copyright by  shopbee-user-service, all rights reserved.
+ * Copyright by shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
@@ -19,16 +19,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.List;
 
 /**
  * The type User.

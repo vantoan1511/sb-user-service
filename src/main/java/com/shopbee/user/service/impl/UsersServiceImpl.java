@@ -25,7 +25,6 @@ import com.shopbee.user.v1.dto.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -74,10 +73,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<User> getUsers(Integer offset, Integer limit) {
         return usersRepository.findAll()
-            .page(Optional.ofNullable(offset).orElse(0), Optional.ofNullable(limit).orElse(20))
-            .stream()
-            .map(userMapper::toUser)
-            .toList();
+                .page(Optional.ofNullable(offset).orElse(0), Optional.ofNullable(limit).orElse(20))
+                .stream()
+                .map(userMapper::toUser)
+                .toList();
     }
 
     /**
@@ -89,8 +88,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public User getUserById(String userId) {
         return usersRepository.findByIdOptional(userId)
-            .map(userMapper::toUser)
-            .orElseThrow(this::getUserNotFound);
+                .map(userMapper::toUser)
+                .orElseThrow(this::getUserNotFound);
     }
 
     /**
@@ -123,7 +122,7 @@ public class UsersServiceImpl implements UsersService {
         validateUpdateEmail(userId, updateUserByIdRequest.getEmail());
 
         com.shopbee.user.entity.User user = usersRepository.findByIdOptional(userId)
-            .orElseThrow(this::getUserNotFound);
+                .orElseThrow(this::getUserNotFound);
 
         userMapper.updateUser(updateUserByIdRequest, user);
     }
@@ -139,7 +138,7 @@ public class UsersServiceImpl implements UsersService {
         validateUpdateEmail(userId, patchUserByIdRequest.getEmail());
 
         com.shopbee.user.entity.User user = usersRepository.findByIdOptional(userId)
-            .orElseThrow(this::getUserNotFound);
+                .orElseThrow(this::getUserNotFound);
 
         userMapper.patchUser(patchUserByIdRequest, user);
     }

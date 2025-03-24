@@ -14,7 +14,6 @@ import com.shopbee.user.v1.dto.PatchUserAddressRequest;
 import com.shopbee.user.v1.dto.PatchUserByIdRequest;
 import com.shopbee.user.v1.dto.UpdateUserByIdRequest;
 import com.shopbee.user.v1.dto.User;
-
 import java.util.List;
 
 /**
