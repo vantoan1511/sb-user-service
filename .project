@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>sb-user-service</name>
-	<comment>The implementation of the sb-user-service.</comment>
+	<name>shopbee-user-service</name>
+	<comment>The implementation of the shopbee-user-service.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

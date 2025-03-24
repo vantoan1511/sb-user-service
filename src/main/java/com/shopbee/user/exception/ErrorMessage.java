@@ -14,6 +14,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * Represents an error message with optional details.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +26,11 @@ public class ErrorMessage implements Serializable {
     private String message;
     private Object details;
 
+    /**
+     * Constructs an ErrorMessage with the specified message.
+     *
+     * @param message the error message
+     */
     public ErrorMessage(String message) {
         this.message = message;
     }

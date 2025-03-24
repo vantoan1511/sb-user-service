@@ -58,6 +58,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "phone", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
     void patchUser(PatchUserByIdRequest patchUserByIdRequest, @MappingTarget User user);
 
     /**
@@ -70,7 +71,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "phone", ignore = true)
-    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
