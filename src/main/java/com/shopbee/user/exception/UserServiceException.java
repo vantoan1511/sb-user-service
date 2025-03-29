@@ -1,7 +1,7 @@
 /*
  * UserServiceException.java
  *
- * Copyright by  shopbee-user-service, all rights reserved.
+ * Copyright by shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
@@ -10,6 +10,9 @@ package com.shopbee.user.exception;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
+/**
+ * The type User service exception.
+ */
 public final class UserServiceException extends WebApplicationException {
 
 
@@ -74,6 +77,12 @@ public final class UserServiceException extends WebApplicationException {
         return create(Response.Status.CONFLICT, message);
     }
 
+    /**
+     * Not implemented user service exception.
+     *
+     * @param message the message
+     * @return the user service exception
+     */
     public static UserServiceException notImplemented(String message) {
         return create(Response.Status.NOT_IMPLEMENTED, message);
     }

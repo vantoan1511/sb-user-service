@@ -1,3 +1,10 @@
+/*
+ * JsonParseExceptionMapper.java
+ *
+ * Copyright by shopbee-user-service, all rights reserved.
+ * MIT License: https://mit-license.org
+ */
+
 package com.shopbee.user.exception.common;
 
 import com.fasterxml.jackson.core.JsonParseException;

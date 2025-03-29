@@ -1,7 +1,7 @@
 /*
  * UserPhone.java
  *
- * Copyright by  shopbee-user-service, all rights reserved.
+ * Copyright by shopbee-user-service, all rights reserved.
  * MIT License: https://mit-license.org
  */
 
@@ -17,6 +17,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Phone.
+ */
 @Data
 @Builder
 @NoArgsConstructor

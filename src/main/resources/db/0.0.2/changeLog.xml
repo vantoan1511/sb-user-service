@@ -37,6 +37,7 @@
             <column name="DISTRICT" type="VARCHAR(255)"/>
             <column name="CITY" type="VARCHAR(255)"/>
             <column name="POSTAL_CODE" type="VARCHAR(8)"/>
+            <column name="IS_DEFAULT" type="BOOLEAN"/>
         </createTable>
     </changeSet>
 
