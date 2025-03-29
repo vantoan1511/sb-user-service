@@ -44,6 +44,7 @@ public interface UserMapper {
      * @return the user
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     User toUser(CreateUserRequest createUserRequest);

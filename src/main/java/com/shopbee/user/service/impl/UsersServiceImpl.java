@@ -7,6 +7,8 @@
 
 package com.shopbee.user.service.impl;
 
+import com.shopbee.user.entity.Phone;
+import com.shopbee.user.entity.PhoneId;
 import com.shopbee.user.exception.UserServiceException;
 import com.shopbee.user.mapper.AddressMapper;
 import com.shopbee.user.mapper.PhoneMapper;
@@ -29,6 +31,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The type Users service.
+ */
 @ApplicationScoped
 public class UsersServiceImpl implements UsersService {
 
@@ -105,9 +110,17 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public String createUser(CreateUserRequest createUserRequest) {
-        validateCreateUserRequest(createUserRequest);
-
         com.shopbee.user.entity.User user = userMapper.toUser(createUserRequest);
+
+        Phone phone = user.getPhone();
+
+        validateUniqueUsername(user.getUsername());
+        validateUniqueEmail(user.getEmail());
+
+        if (Objects.nonNull(phone)) {
+            validateUniquePhone(phone.getId());
+            phone.setUser(user);
+        }
 
         usersRepository.persist(user);
 
@@ -246,34 +259,35 @@ public class UsersServiceImpl implements UsersService {
     }
 
     /**
-     * Validates the create user request.
+     * Validates the uniqueness of the email.
      *
-     * @param createUserRequest the create user request
+     * @param email the email
      */
-    private void validateCreateUserRequest(CreateUserRequest createUserRequest) {
-        validateUniqueEmail(createUserRequest);
-        validateUniqueUsername(createUserRequest);
+    private void validateUniqueEmail(String email) {
+        if (usersRepository.existedByEmail(email)) {
+            throw UserServiceException.conflict("User with email already exists");
+        }
     }
 
     /**
      * Validates the uniqueness of the username.
      *
-     * @param createUserRequest the create user request
+     * @param username the username
      */
-    private void validateUniqueUsername(CreateUserRequest createUserRequest) {
-        if (usersRepository.existedByUsername(createUserRequest.getUsername())) {
+    private void validateUniqueUsername(String username) {
+        if (usersRepository.existedByUsername(username)) {
             throw UserServiceException.conflict("User with username already exists");
         }
     }
 
     /**
-     * Validates the uniqueness of the email.
+     * Validate unique phone.
      *
-     * @param createUserRequest the create user request
+     * @param phoneId the phone id
      */
-    private void validateUniqueEmail(CreateUserRequest createUserRequest) {
-        if (usersRepository.existedByEmail(createUserRequest.getEmail())) {
-            throw UserServiceException.conflict("User with email already exists");
+    private void validateUniquePhone(PhoneId phoneId) {
+        if (phoneRepository.existedById(phoneId)) {
+            throw UserServiceException.conflict("User with phone already exists");
         }
     }
 
@@ -286,6 +300,18 @@ public class UsersServiceImpl implements UsersService {
     private void validateUpdateEmail(String userId, String email) {
         if (usersRepository.existedByEmailExcludedById(email, userId)) {
             throw UserServiceException.conflict("User with email already exists");
+        }
+    }
+
+    /**
+     * Validate update phone.
+     *
+     * @param phoneId the phone id
+     * @param userId  the user id
+     */
+    private void validateUpdatePhone(PhoneId phoneId, String userId) {
+        if (phoneRepository.existedByIdExcludedByUserId(phoneId, userId)) {
+            throw UserServiceException.conflict("User with phone already exists");
         }
     }
 

@@ -25,4 +25,8 @@ public class PhoneRepository implements PanacheRepositoryBase<Phone, PhoneId> {
         return findByIdOptional(phoneId).isPresent();
     }
 
+    public boolean existedByIdExcludedByUserId(PhoneId phoneId, String userId) {
+        return find("user.id != ?1 and id = ?2", userId, phoneId).count() > 0;
+    }
+
 }
