@@ -16,6 +16,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
@@ -35,6 +36,7 @@ public interface AddressMapper {
      */
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "asDefault", source = "isDefault")
+    @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     Address toAddress(com.shopbee.user.v1.dto.Address source);
 
     /**
@@ -47,6 +49,7 @@ public interface AddressMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "asDefault", source = "isDefault")
+    @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     Address toAddress(CreateUserAddressRequest source);
 
     /**
@@ -63,11 +66,18 @@ public interface AddressMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "asDefault", source = "isDefault")
+    @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void updateAddress(CreateUserAddressRequest source, @MappingTarget Address target);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "asDefault", source = "isDefault")
+    @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void patchAddress(PatchUserAddressRequest source, @MappingTarget Address target);
+
+    @Named("mapAddressTypeToStringValue")
+    default Address.Type mapAddressTypeFromStringValue(String value) {
+        return Address.Type.fromValue(value);
+    }
 }
