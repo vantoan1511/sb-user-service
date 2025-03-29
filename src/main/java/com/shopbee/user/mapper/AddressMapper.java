@@ -25,6 +25,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface AddressMapper {
 
+    /**
+     * Converts a list of Address entities to a list of Address DTOs.
+     *
+     * @param source the list of Address entities
+     * @return the list of Address DTOs
+     */
     List<com.shopbee.user.v1.dto.Address> toAddresses(List<Address> source);
 
     /**
@@ -62,6 +68,12 @@ public interface AddressMapper {
     @Mapping(target = "isDefault", source = "asDefault")
     com.shopbee.user.v1.dto.Address toAddress(Address source);
 
+    /**
+     * Updates an Address entity with values from a CreateUserAddressRequest DTO.
+     *
+     * @param source the source CreateUserAddressRequest DTO
+     * @param target the target Address entity
+     */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
@@ -69,6 +81,12 @@ public interface AddressMapper {
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void updateAddress(CreateUserAddressRequest source, @MappingTarget Address target);
 
+    /**
+     * Partially updates an Address entity with values from a PatchUserAddressRequest DTO.
+     *
+     * @param source the source PatchUserAddressRequest DTO
+     * @param target the target Address entity
+     */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
@@ -76,6 +94,12 @@ public interface AddressMapper {
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void patchAddress(PatchUserAddressRequest source, @MappingTarget Address target);
 
+    /**
+     * Maps a string value to an Address.Type enum.
+     *
+     * @param value the string value
+     * @return the corresponding Address.Type enum
+     */
     @Named("mapAddressTypeToStringValue")
     default Address.Type mapAddressTypeFromStringValue(String value) {
         return Address.Type.fromValue(value);

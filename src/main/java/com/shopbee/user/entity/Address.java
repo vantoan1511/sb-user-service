@@ -25,7 +25,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Address.
+ * Represents an address entity.
  */
 @Data
 @Builder
@@ -66,16 +66,17 @@ public class Address {
     private User user;
 
     /**
-     * The enum Type.
+     * The enum representing the type of the address.
      */
     public enum Type {
         HOME, WORK, OTHER;
 
         /**
-         * From value type.
+         * Converts a string value to a Type enum.
          *
-         * @param value the value
-         * @return the type
+         * @param value the string value
+         * @return the corresponding Type enum
+         * @throws UserServiceException if the value does not match any Type
          */
         public static Type fromValue(String value) {
             return Arrays.stream(values())

@@ -15,6 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Phone id.
+ */
 @Data
 @Builder
 @NoArgsConstructor
