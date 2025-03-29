@@ -29,12 +29,23 @@ import org.mapstruct.ReportingPolicy;
 public interface UserMapper {
 
     /**
+     * To users list.
+     *
+     * @param users the users
+     * @return the list
+     */
+    @Mapping(target = "addresses", ignore = true)
+    List<com.shopbee.user.v1.dto.User> toUsers(List<User> users);
+
+    /**
      * Map CreateUserRequest to User.
      *
      * @param createUserRequest the create user request
      * @return the user
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     User toUser(CreateUserRequest createUserRequest);
 
     /**
@@ -74,12 +85,4 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
-
-    /**
-     * To users list.
-     *
-     * @param users the users
-     * @return the list
-     */
-    List<com.shopbee.user.v1.dto.User> toUsers(List<User> users);
 }

@@ -9,15 +9,22 @@ package com.shopbee.user.mapper;
 
 import com.shopbee.user.entity.Address;
 import com.shopbee.user.v1.dto.CreateUserAddressRequest;
+import com.shopbee.user.v1.dto.PatchUserAddressRequest;
+import java.util.List;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Mapper interface for converting between Address entities and DTOs.
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface AddressMapper {
+
+    List<com.shopbee.user.v1.dto.Address> toAddresses(List<Address> source);
 
     /**
      * Maps a com.shopbee.user.v1.dto.Address object to an Address entity.
@@ -51,4 +58,16 @@ public interface AddressMapper {
      */
     @Mapping(target = "isDefault", source = "asDefault")
     com.shopbee.user.v1.dto.Address toAddress(Address source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "asDefault", source = "isDefault")
+    void updateAddress(CreateUserAddressRequest source, @MappingTarget Address target);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "asDefault", source = "isDefault")
+    void patchAddress(PatchUserAddressRequest source, @MappingTarget Address target);
 }

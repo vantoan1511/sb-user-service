@@ -26,6 +26,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -72,11 +73,14 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public List<User> getUsers(Integer offset, Integer limit) {
-        return usersRepository.findAll()
-                .page(Optional.ofNullable(offset).orElse(0), Optional.ofNullable(limit).orElse(20))
-                .stream()
-                .map(userMapper::toUser)
-                .toList();
+        Integer pageIndex = Optional.ofNullable(offset).orElse(0);
+        Integer pageSize = Optional.ofNullable(limit).orElse(20);
+
+        List<com.shopbee.user.entity.User> users = usersRepository.findAll()
+                .page(pageIndex, pageSize)
+                .list();
+
+        return userMapper.toUsers(users);
     }
 
     /**
@@ -134,6 +138,7 @@ public class UsersServiceImpl implements UsersService {
      * @param patchUserByIdRequest the request object containing partial user details
      */
     @Override
+    @Transactional
     public void patchUserById(String userId, PatchUserByIdRequest patchUserByIdRequest) {
         validateUpdateEmail(userId, patchUserByIdRequest.getEmail());
 
@@ -151,10 +156,6 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void deleteUserById(String userId) {
-        if (!usersRepository.existedById(userId)) {
-            throw getUserNotFound();
-        }
-
         usersRepository.deleteById(userId);
     }
 
@@ -168,7 +169,9 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public List<Address> getUserAddresses(String userId, Integer offset, Integer limit) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        int pageIndex = Optional.ofNullable(offset).orElse(0);
+        int pageSize = Optional.ofNullable(limit).orElse(20);
+        return addressMapper.toAddresses(addressRepository.findByUserId(userId, pageIndex, pageSize));
     }
 
     /**
@@ -200,8 +203,15 @@ public class UsersServiceImpl implements UsersService {
      * @param createUserAddressRequest the request object containing updated address details
      */
     @Override
+    @Transactional
     public void updateUserAddress(String userId, String addressId, CreateUserAddressRequest createUserAddressRequest) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(addressId, userId);
+
+        if (Objects.isNull(address)) {
+            throw UserServiceException.notFound("Address not found");
+        }
+
+        addressMapper.updateAddress(createUserAddressRequest, address);
     }
 
     /**
@@ -212,8 +222,15 @@ public class UsersServiceImpl implements UsersService {
      * @param patchUserAddressRequest the request object containing partial address details
      */
     @Override
+    @Transactional
     public void patchUserAddress(String userId, String addressId, PatchUserAddressRequest patchUserAddressRequest) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(addressId, userId);
+
+        if (Objects.isNull(address)) {
+            throw UserServiceException.notFound("Address not found");
+        }
+
+        addressMapper.patchAddress(patchUserAddressRequest, address);
     }
 
     /**
@@ -223,8 +240,9 @@ public class UsersServiceImpl implements UsersService {
      * @param addressId the ID of the address to delete
      */
     @Override
+    @Transactional
     public void deleteUserAddress(String userId, String addressId) {
-        throw UserServiceException.notImplemented("Operation not implemented");
+        addressRepository.deleteById(addressId);
     }
 
     /**
