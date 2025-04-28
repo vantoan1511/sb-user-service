@@ -22,18 +22,20 @@ import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
  * Represents an address entity.
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "shopbee_address")
-public class Address {
+public class Address extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -57,9 +59,6 @@ public class Address {
 
     @Column(name = "postal_code")
     private String postalCode;
-
-    @Column(name = "is_default")
-    private boolean asDefault;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

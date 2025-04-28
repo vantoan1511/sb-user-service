@@ -41,7 +41,6 @@ public interface AddressMapper {
      * @return the mapped Address entity
      */
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "asDefault", source = "isDefault")
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     Address toAddress(com.shopbee.user.v1.dto.Address source);
 
@@ -54,7 +53,6 @@ public interface AddressMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "asDefault", source = "isDefault")
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     Address toAddress(CreateUserAddressRequest source);
 
@@ -65,7 +63,6 @@ public interface AddressMapper {
      * @param source the source Address entity
      * @return the mapped Address DTO
      */
-    @Mapping(target = "isDefault", source = "asDefault")
     com.shopbee.user.v1.dto.Address toAddress(Address source);
 
     /**
@@ -77,7 +74,6 @@ public interface AddressMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "asDefault", source = "isDefault")
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void updateAddress(CreateUserAddressRequest source, @MappingTarget Address target);
 
@@ -90,7 +86,6 @@ public interface AddressMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "asDefault", source = "isDefault")
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
     void patchAddress(PatchUserAddressRequest source, @MappingTarget Address target);
 

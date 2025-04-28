@@ -14,6 +14,7 @@ import com.shopbee.user.v1.dto.CreateUserRequest;
 import com.shopbee.user.v1.dto.PatchUserAddressRequest;
 import com.shopbee.user.v1.dto.PatchUserByIdRequest;
 import com.shopbee.user.v1.dto.UpdateUserByIdRequest;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import jakarta.ws.rs.core.UriInfo;
 import java.net.URI;
 
 @ApplicationScoped
+@Authenticated
 public class UsersApiImpl implements UsersApi {
 
     private final UsersService usersService;
@@ -44,67 +46,79 @@ public class UsersApiImpl implements UsersApi {
     }
 
     @Override
-    public Response createUser(@Valid @NotNull CreateUserRequest createUserRequest) {
-        String userId = usersService.createUser(createUserRequest);
+    public Response createUser(@NotNull String tenantId, @Valid @NotNull CreateUserRequest createUserRequest) {
+        String userId = usersService.createUser(tenantId, createUserRequest);
         URI location = uriInfo.getAbsolutePathBuilder().path(userId).build();
         return Response.created(location).entity(userId).build();
     }
 
     @Override
-    public Response createUserAddress(String userId, @Valid @NotNull CreateUserAddressRequest createUserAddressRequest) {
-        String addressId = usersService.createUserAddress(userId, createUserAddressRequest);
+    public Response createUserAddress(@NotNull String tenantId, String userId, @Valid @NotNull CreateUserAddressRequest createUserAddressRequest) {
+        String addressId = usersService.createUserAddress(tenantId, userId, createUserAddressRequest);
         URI location = uriInfo.getAbsolutePathBuilder().path(addressId).build();
         return Response.created(location).entity(addressId).build();
     }
 
     @Override
-    public Response deleteUserAddress(String userId, String addressId) {
-        usersService.deleteUserAddress(userId, addressId);
+    public Response deleteUserAddress(@NotNull String tenantId, String userId, String addressId) {
+        usersService.deleteUserAddress(tenantId, userId, addressId);
         return Response.noContent().build();
     }
 
     @Override
-    public Response deleteUserById(String userId) {
-        usersService.deleteUserById(userId);
+    public Response deleteUserById(@NotNull String tenantId, String userId) {
+        usersService.deleteUserById(tenantId, userId);
         return Response.noContent().build();
     }
 
     @Override
-    public Response getUserAddresses(String userId, @Min(0L) Integer offset, @Min(1L) Integer limit) {
-        return Response.ok(usersService.getUserAddresses(userId, offset, limit)).build();
+    public Response getUserAddresses(@NotNull String tenantId, String userId, @Min(0L) Integer offset, @Min(1L) Integer limit) {
+        return Response.ok(usersService.getUserAddresses(tenantId, userId, offset, limit)).build();
     }
 
     @Override
-    public Response getUserById(String userId) {
-        return Response.ok(usersService.getUserById(userId)).build();
+    public Response getUserById(@NotNull String tenantId, String userId) {
+        return Response.ok(usersService.getUserById(tenantId, userId)).build();
     }
 
     @Override
-    public Response getUsers(@QueryParam("offset") @DefaultValue("0") @Min(0L) Integer offset, @QueryParam("limit") @DefaultValue("20") @Min(1L) Integer limit) {
-        return Response.ok(usersService.getUsers(offset, limit)).build();
+    public Response getUsers(@NotNull String tenantId,
+                             @QueryParam("offset") @DefaultValue("0") @Min(0L) Integer offset,
+                             @QueryParam("limit") @DefaultValue("20") @Min(1L) Integer limit) {
+        return Response.ok(usersService.getUsers(tenantId, offset, limit)).build();
     }
 
     @Override
-    public Response patchUserAddress(String userId, String addressId, @Valid @NotNull PatchUserAddressRequest patchUserAddressRequest) {
-        usersService.patchUserAddress(userId, addressId, patchUserAddressRequest);
+    public Response patchUserAddress(@NotNull String tenantId,
+                                     String userId,
+                                     String addressId,
+                                     @Valid @NotNull PatchUserAddressRequest patchUserAddressRequest) {
+        usersService.patchUserAddress(tenantId, userId, addressId, patchUserAddressRequest);
         return Response.ok().build();
     }
 
     @Override
-    public Response patchUserById(String userId, @Valid @NotNull PatchUserByIdRequest patchUserByIdRequest) {
-        usersService.patchUserById(userId, patchUserByIdRequest);
+    public Response patchUserById(@NotNull String tenantId,
+                                  String userId,
+                                  @Valid @NotNull PatchUserByIdRequest patchUserByIdRequest) {
+        usersService.patchUserById(tenantId, userId, patchUserByIdRequest);
         return Response.ok().build();
     }
 
     @Override
-    public Response updateUserAddress(String userId, String addressId, @Valid @NotNull CreateUserAddressRequest createUserAddressRequest) {
-        usersService.updateUserAddress(userId, addressId, createUserAddressRequest);
+    public Response updateUserAddress(@NotNull String tenantId,
+                                      String userId,
+                                      String addressId,
+                                      @Valid @NotNull CreateUserAddressRequest createUserAddressRequest) {
+        usersService.updateUserAddress(tenantId, userId, addressId, createUserAddressRequest);
         return Response.ok().build();
     }
 
     @Override
-    public Response updateUserById(String userId, @Valid @NotNull UpdateUserByIdRequest updateUserByIdRequest) {
-        usersService.updateUserById(userId, updateUserByIdRequest);
+    public Response updateUserById(@NotNull String tenantId,
+                                   String userId,
+                                   @Valid @NotNull UpdateUserByIdRequest updateUserByIdRequest) {
+        usersService.updateUserById(tenantId, userId, updateUserByIdRequest);
         return Response.ok().build();
     }
 }

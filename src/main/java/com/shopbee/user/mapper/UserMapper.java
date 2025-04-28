@@ -20,6 +20,9 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
+/**
+ * The interface User mapper.
+ */
 @Mapper(
         componentModel = MappingConstants.ComponentModel.CDI,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -40,6 +43,7 @@ public interface UserMapper {
     /**
      * Map CreateUserRequest to User.
      *
+     * @param tenantId          the tenant id
      * @param createUserRequest the create user request
      * @return the user
      */
@@ -47,7 +51,10 @@ public interface UserMapper {
     @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    User toUser(CreateUserRequest createUserRequest);
+    @Mapping(target = "phone", ignore = true)
+    @Mapping(target = "defaultAddress", ignore = true)
+    @Mapping(target = "tenantId", source = "tenantId")
+    User toUser(String tenantId, CreateUserRequest createUserRequest);
 
     /**
      * To user.
@@ -57,6 +64,7 @@ public interface UserMapper {
      */
     @Mapping(target = "phone.countryCode", source = "phone.id.countryCode")
     @Mapping(target = "phone.number", source = "phone.id.number")
+    @Mapping(target = "defaultAddress", ignore = true)
     com.shopbee.user.v1.dto.User toUser(User user);
 
     /**
@@ -70,6 +78,9 @@ public interface UserMapper {
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "phone", ignore = true)
     @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "defaultAddress", ignore = true)
     void patchUser(PatchUserByIdRequest patchUserByIdRequest, @MappingTarget User user);
 
     /**
@@ -85,5 +96,6 @@ public interface UserMapper {
     @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "defaultAddress", ignore = true)
     void updateUser(UpdateUserByIdRequest updateUserByIdRequest, @MappingTarget User user);
 }

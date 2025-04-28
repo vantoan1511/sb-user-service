@@ -7,6 +7,7 @@
 
 package com.shopbee.user.exception;
 
+import com.shopbee.common.exception.ErrorMessage;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;

@@ -22,7 +22,10 @@
             <column name="STATUS" type="VARCHAR(10)"/>
             <column name="CREATED_AT" type="TIMESTAMP WITH TIME ZONE"/>
             <column name="UPDATED_AT" type="TIMESTAMP WITH TIME ZONE"/>
-            <column name="ADDRESS_ID" type="VARCHAR(64)"/>
+            <column name="DEFAULT_ADDRESS" type="VARCHAR(64)"/>
+            <column name="TENANT_ID" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -37,7 +40,12 @@
             <column name="DISTRICT" type="VARCHAR(255)"/>
             <column name="CITY" type="VARCHAR(255)"/>
             <column name="POSTAL_CODE" type="VARCHAR(8)"/>
-            <column name="IS_DEFAULT" type="BOOLEAN"/>
+            <column name="USER_ID" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TENANT_ID" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -52,6 +60,9 @@
             <column name="USER_ID" type="VARCHAR(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <column name="TENANT_ID" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -61,13 +72,21 @@
 
     <changeSet id="shopbee-user-service-5" author="shopbee">
         <addForeignKeyConstraint baseTableName="shopbee_user"
-                                 baseColumnNames="ADDRESS_ID"
-                                 constraintName="fk_user_address"
+                                 baseColumnNames="DEFAULT_ADDRESS"
+                                 constraintName="fk_user_default_address"
                                  referencedTableName="shopbee_address"
                                  referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="shopbee-user-service-6" author="shopbee">
+        <addForeignKeyConstraint baseTableName="shopbee_address"
+                                 baseColumnNames="USER_ID"
+                                 constraintName="fk_address_user"
+                                 referencedTableName="shopbee_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="shopbee-user-service-7" author="shopbee">
         <addForeignKeyConstraint baseTableName="shopbee_phone"
                                  baseColumnNames="USER_ID"
                                  constraintName="fk_phone_user"

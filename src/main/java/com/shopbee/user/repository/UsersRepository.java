@@ -8,21 +8,58 @@
 package com.shopbee.user.repository;
 
 import com.shopbee.user.entity.User;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.Optional;
 
+/**
+ * The type Users repository.
+ */
 @ApplicationScoped
 public class UsersRepository implements PanacheRepositoryBase<User, String> {
 
     /**
+     * Find all by tenantId.
+     *
+     * @param tenantId the tenant id
+     * @return the panache query
+     */
+    public PanacheQuery<User> findAll(String tenantId) {
+        return find("tenantId", tenantId);
+    }
+
+    /**
+     * Find by id optional.
+     *
+     * @param tenantId the tenant id
+     * @param id       the id
+     * @return the optional
+     */
+    public Optional<User> findById(String tenantId, String id) {
+        return find("tenantId = ?1 AND id = ?2", tenantId, id).firstResultOptional();
+    }
+
+    /**
+     * Delete by id.
+     *
+     * @param tenantId the tenant id
+     * @param id       the id
+     */
+    public void deleteById(String tenantId, String id) {
+        delete("tenantId = ?1 AND id = ?2", tenantId, id);
+    }
+
+    /**
      * Existed by email excluded by id boolean.
      *
-     * @param email the email
-     * @param id    the id
+     * @param tenantId the tenant id
+     * @param email    the email
+     * @param id       the id
      * @return the boolean
      */
-    public boolean existedByEmailExcludedById(String email, String id) {
-        return count("email = ?1 AND id != ?2", email, id) > 0;
+    public boolean existedByEmailExcludedById(String tenantId, String email, String id) {
+        return count("tenantId = ?1 AND email = ?2 AND id != ?3", tenantId, email, id) > 0;
     }
 
     /**
@@ -38,21 +75,23 @@ public class UsersRepository implements PanacheRepositoryBase<User, String> {
     /**
      * Existed by username boolean.
      *
+     * @param tenantId the tenant id
      * @param username the username
      * @return the boolean
      */
-    public boolean existedByUsername(String username) {
-        return count("username", username) > 0;
+    public boolean existedByUsername(String tenantId, String username) {
+        return count("tenantId = ?1 AND username = ?2", tenantId, username) > 0;
     }
 
     /**
      * Existed by email boolean.
      *
-     * @param email the email
+     * @param tenantId the tenant id
+     * @param email    the email
      * @return the boolean
      */
-    public boolean existedByEmail(String email) {
-        return count("email", email) > 0;
+    public boolean existedByEmail(String tenantId, String email) {
+        return count("tenantId = ?1 AND email = ?2", tenantId, email) > 0;
     }
 
 }
