@@ -37,7 +37,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy-jackson'
 
     // security
-    //implementation 'io.quarkus:quarkus-oidc'
+    implementation 'io.quarkus:quarkus-oidc'
     //testImplementation 'io.quarkus:quarkus-test-security'
 
     // readiness and liveness probe support
@@ -50,7 +50,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-liquibase'
 
     // shopbee dependencies
-    implementation 'com.shopbee.user:shopbee-user-service-api:1.0.0'
+    implementation 'com.shopbee.user:shopbee-user-service-api:1.1.0'
+    implementation 'com.shopbee.tenant.resolver:shopbee-tenant-resolver:0.0.1-SNAPSHOT'
+    implementation 'com.shopbee.common:shopbee-common-exception:0.0.1-SNAPSHOT'
 
     // testing
     testImplementation 'io.quarkus:quarkus-junit5'
