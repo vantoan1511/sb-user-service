@@ -36,8 +36,12 @@ import org.slf4j.LoggerFactory;
 public class UsersServiceImpl implements UsersService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsersServiceImpl.class);
+    private static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE_INDEX = 0;
+
     private final UsersRepository usersRepository;
     private final AddressRepository addressRepository;
+
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
 
@@ -62,8 +66,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<User> getUsers(String tenantId, Integer offset, Integer limit) {
-        Integer pageIndex = Optional.ofNullable(offset).orElse(0);
-        Integer pageSize = Optional.ofNullable(limit).orElse(20);
+        Integer pageIndex = Optional.ofNullable(offset).orElse(DEFAULT_PAGE_INDEX);
+        Integer pageSize = Optional.ofNullable(limit).orElse(DEFAULT_PAGE_SIZE);
 
         List<com.shopbee.user.entity.User> users = usersRepository.findAll(tenantId)
                 .page(pageIndex, pageSize)
@@ -74,7 +78,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User getUserById(String tenantId, String userId) {
-        return usersRepository.findById(tenantId, userId)
+        return Optional.ofNullable(usersRepository.findById(tenantId, userId))
                 .map(userMapper::toUser)
                 .orElseThrow(this::getUserNotFound);
     }
@@ -97,8 +101,12 @@ public class UsersServiceImpl implements UsersService {
     public void updateUserById(String tenantId, String userId, UpdateUserByIdRequest updateUserByIdRequest) {
         validateUpdateEmail(tenantId, userId, updateUserByIdRequest.getEmail());
 
-        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId)
-                .orElseThrow(this::getUserNotFound);
+        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId);
+
+        if (Objects.isNull(user)) {
+            LOG.warn("Attempts to update non - existing user [{}]", userId);
+            throw getUserNotFound();
+        }
 
         userMapper.updateUser(updateUserByIdRequest, user);
     }
@@ -108,8 +116,12 @@ public class UsersServiceImpl implements UsersService {
     public void patchUserById(String tenantId, String userId, PatchUserByIdRequest patchUserByIdRequest) {
         validateUpdateEmail(tenantId, userId, patchUserByIdRequest.getEmail());
 
-        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId)
-                .orElseThrow(this::getUserNotFound);
+        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId);
+
+        if (Objects.isNull(user)) {
+            LOG.warn("Attempts to patch non - existing user [{}]", userId);
+            throw getUserNotFound();
+        }
 
         userMapper.patchUser(patchUserByIdRequest, user);
     }
@@ -117,26 +129,38 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void deleteUserById(String tenantId, String userId) {
-        usersRepository.deleteById(tenantId, userId);
+        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId);
+
+        if (Objects.isNull(user)) {
+            LOG.warn("Attempts to delete non - existing user [{}]", userId);
+            throw getUserNotFound();
+        }
+
+        usersRepository.delete(user);
     }
 
     @Override
     public List<Address> getUserAddresses(String tenantId, String userId, Integer offset, Integer limit) {
-        int pageIndex = Optional.ofNullable(offset).orElse(0);
-        int pageSize = Optional.ofNullable(limit).orElse(20);
-        return addressMapper.toAddresses(addressRepository.findByUserId(userId, pageIndex, pageSize));
+        int pageIndex = Optional.ofNullable(offset).orElse(DEFAULT_PAGE_INDEX);
+        int pageSize = Optional.ofNullable(limit).orElse(DEFAULT_PAGE_SIZE);
+        return addressMapper.toAddresses(addressRepository.findByUserId(tenantId, userId, pageIndex, pageSize));
     }
 
     @Override
     @Transactional
     public String createUserAddress(String tenantId, String userId, CreateUserAddressRequest createUserAddressRequest) {
-        com.shopbee.user.entity.User user = usersRepository.findByIdOptional(userId).orElseThrow(this::getUserNotFound);
+        com.shopbee.user.entity.User user = usersRepository.findById(tenantId, userId);
 
-        com.shopbee.user.entity.Address address = addressMapper.toAddress(createUserAddressRequest);
+        if (Objects.isNull(user)) {
+            LOG.warn("Attempts to create address for non - existing user [{}]", userId);
+            throw getUserNotFound();
+        }
 
-        addressRepository.persist(address);
+        com.shopbee.user.entity.Address address = addressMapper.toAddress(tenantId, createUserAddressRequest);
 
         user.addAddress(address);
+
+        addressRepository.persist(address);
 
         return address.getId();
     }
@@ -144,10 +168,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void updateUserAddress(String tenantId, String userId, String addressId, CreateUserAddressRequest createUserAddressRequest) {
-        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(addressId, userId);
+        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(tenantId, addressId, userId);
 
         if (Objects.isNull(address)) {
-            LOG.warn("Attempts to update user address with non - existing address[{}]", addressId);
+            LOG.warn("Attempts to update user address with non - existing address [{}]", addressId);
             throw UserServiceException.notFound("Address not found");
         }
 
@@ -157,7 +181,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void patchUserAddress(String tenantId, String userId, String addressId, PatchUserAddressRequest patchUserAddressRequest) {
-        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(addressId, userId);
+        com.shopbee.user.entity.Address address = addressRepository.findByIdAndUserId(tenantId, addressId, userId);
 
         if (Objects.isNull(address)) {
             LOG.warn("Attempts to patch user address with non - existing address[{}]", addressId);

@@ -54,7 +54,8 @@ public interface AddressMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "type", qualifiedByName = "mapAddressTypeToStringValue")
-    Address toAddress(CreateUserAddressRequest source);
+    @Mapping(target = "tenantId", source = "tenantId")
+    Address toAddress(String tenantId, CreateUserAddressRequest source);
 
     /**
      * Maps an Address entity to a com.shopbee.user.v1.dto.Address object.

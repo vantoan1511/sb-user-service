@@ -20,7 +20,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,12 +29,11 @@ import lombok.NoArgsConstructor;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "shopbee_address")
-public class Address extends AbstractEntity{
+public class Address extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -61,7 +59,7 @@ public class Address extends AbstractEntity{
     private String postalCode;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     /**

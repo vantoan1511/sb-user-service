@@ -11,7 +11,6 @@ import com.shopbee.user.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.Optional;
 
 /**
  * The type Users repository.
@@ -36,18 +35,8 @@ public class UsersRepository implements PanacheRepositoryBase<User, String> {
      * @param id       the id
      * @return the optional
      */
-    public Optional<User> findById(String tenantId, String id) {
-        return find("tenantId = ?1 AND id = ?2", tenantId, id).firstResultOptional();
-    }
-
-    /**
-     * Delete by id.
-     *
-     * @param tenantId the tenant id
-     * @param id       the id
-     */
-    public void deleteById(String tenantId, String id) {
-        delete("tenantId = ?1 AND id = ?2", tenantId, id);
+    public User findById(String tenantId, String id) {
+        return find("tenantId = ?1 AND id = ?2", tenantId, id).firstResult();
     }
 
     /**

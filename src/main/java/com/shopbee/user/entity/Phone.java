@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,8 +28,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "shopbee_phone")
-public class Phone extends AbstractEntity{
+@Table(name = "shopbee_phone", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"country_code", "number", "tenant_id"})
+})
+public class Phone extends AbstractEntity {
 
     @EmbeddedId
     private PhoneId id;

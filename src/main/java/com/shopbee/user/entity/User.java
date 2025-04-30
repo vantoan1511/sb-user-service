@@ -20,11 +20,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,7 +39,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "shopbee_user")
+@Table(name = "shopbee_user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username", "tenant_id"}),
+        @UniqueConstraint(columnNames = {"email", "tenant_id"})
+})
 public class User extends AbstractEntity {
 
     @Id

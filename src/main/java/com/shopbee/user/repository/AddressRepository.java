@@ -27,8 +27,8 @@ public class AddressRepository implements PanacheRepositoryBase<Address, String>
      * @param limit  the maximum number of addresses to return
      * @return the list of addresses for the specified user
      */
-    public List<Address> findByUserId(String userId, int offset, int limit) {
-        return find("user.id", userId).page(offset, limit).list();
+    public List<Address> findByUserId(String tenantId, String userId, int offset, int limit) {
+        return find("tenantId = ?1 AND user.id = ?2", tenantId, userId).page(offset, limit).list();
     }
 
     /**
@@ -38,8 +38,8 @@ public class AddressRepository implements PanacheRepositoryBase<Address, String>
      * @param userId the ID of the user
      * @return the address with the specified ID and user ID, or null if not found
      */
-    public Address findByIdAndUserId(String id, String userId) {
-        return find("id = ?1 and user.id = ?2", id, userId).firstResult();
+    public Address findByIdAndUserId(String tenantId, String id, String userId) {
+        return find("tenantId = ?1 AND id = ?2 and user.id = ?3", tenantId, id, userId).firstResult();
     }
 
 }

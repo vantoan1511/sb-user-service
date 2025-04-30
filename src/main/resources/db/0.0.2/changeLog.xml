@@ -10,10 +10,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="USERNAME" type="VARCHAR(64)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="EMAIL" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="FIRST_NAME" type="VARCHAR(64)"/>
             <column name="LAST_NAME" type="VARCHAR(64)"/>
@@ -67,10 +67,27 @@
     </changeSet>
 
     <changeSet id="shopbee-user-service-4" author="shopbee">
-        <addPrimaryKey tableName="shopbee_phone" columnNames="COUNTRY_CODE, NUMBER" constraintName="pk_phone"/>
+        <addUniqueConstraint tableName="shopbee_user"
+                             columnNames="USERNAME, TENANT_ID"
+                             constraintName="unique_username"/>
     </changeSet>
 
     <changeSet id="shopbee-user-service-5" author="shopbee">
+        <addUniqueConstraint tableName="shopbee_user"
+                             columnNames="EMAIL, TENANT_ID"
+                             constraintName="unique_email"/>
+    </changeSet>
+
+    <changeSet id="shopbee-user-service-6" author="shopbee">
+        <addUniqueConstraint tableName="shopbee_phone" columnNames="COUNTRY_CODE, NUMBER, TENANT_ID"
+                             constraintName="unique_phone"/>
+    </changeSet>
+
+    <changeSet id="shopbee-user-service-7" author="shopbee">
+        <addPrimaryKey tableName="shopbee_phone" columnNames="COUNTRY_CODE, NUMBER" constraintName="pk_phone"/>
+    </changeSet>
+
+    <changeSet id="shopbee-user-service-8" author="shopbee">
         <addForeignKeyConstraint baseTableName="shopbee_user"
                                  baseColumnNames="DEFAULT_ADDRESS"
                                  constraintName="fk_user_default_address"
@@ -78,7 +95,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="shopbee-user-service-6" author="shopbee">
+    <changeSet id="shopbee-user-service-9" author="shopbee">
         <addForeignKeyConstraint baseTableName="shopbee_address"
                                  baseColumnNames="USER_ID"
                                  constraintName="fk_address_user"
@@ -86,7 +103,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="shopbee-user-service-7" author="shopbee">
+    <changeSet id="shopbee-user-service-10" author="shopbee">
         <addForeignKeyConstraint baseTableName="shopbee_phone"
                                  baseColumnNames="USER_ID"
                                  constraintName="fk_phone_user"
